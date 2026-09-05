@@ -140,6 +140,8 @@ export const BluetoothPedometer = () => (
         the manual-trace topology overlap in capacity-autorouter 0.0.790. */}
     <via name="U2_LDO_ESCAPE" pcbX={-10.09995} pcbY={3.3} connectsTo="net.VCORE" outerDiameter="0.3mm" holeDiameter="0.1mm" />
     <via name="U2_VIO_ESCAPE" pcbX={-8.9} pcbY={1.400052} connectsTo="net.VCORE" outerDiameter="0.3mm" holeDiameter="0.1mm" />
+    {/* Keep SCL's layer change clear of the PMIC interrupt escape. */}
+    <via name="U2_SCL_ESCAPE" pcbX={-8.9} pcbY={2.199898} connectsTo="net.I2C_SCL" outerDiameter="0.3mm" holeDiameter="0.1mm" />
     {/* Local ground escape prevents U2's A4 ball from crossing the IN trace. */}
     <via name="U2_GND_ESCAPE" pcbX={-11.8} pcbY={3.2} connectsTo="net.GND" outerDiameter="0.3mm" holeDiameter="0.1mm" />
     <capacitor name="C1" capacitance="4.7uF" maxVoltageRating="10V" footprint="cap0603" manufacturerPartNumber="CL10A475KP8NNNC" supplierPartNumbers={{ jlcpcb: ["C1705"] }} schSheetName="power" pcbX={-12.5} pcbY={4.7} schX={-4.5} schY={5.8} schOrientation="vertical" connections={{ pin1: "net.CHARGER_IN", pin2: "net.GND" }} />

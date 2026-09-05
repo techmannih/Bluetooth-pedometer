@@ -4,12 +4,56 @@
 claims. A successful CLI exit is not sufficient: inspect the routed artifact
 and run the separate Gerber copper-short check.
 
+## Latest: J2 / SW1 spacing follow-up
+
+J2 and its BAT legend moved 4 mm left, from x = -14 to -18 mm. SW1 stays at
+its original location. The horizontal pad-bound gap increases from 0.075 to
+4.075 mm; the imported 3D model bounds now have approximately 3.2 mm horizontal
+separation. No fitted part, pin connection or other component placement changed.
+
+The first reroute introduced an SCL/PMIC_INT contact near U2 on inner2,
+confirmed by both circuit-error records and the 100-pixels/mm Gerber check.
+An explicit `U2_SCL_ESCAPE` via now anchors the SCL layer change away from the
+interrupt escape. Routing rules and reporting remain unchanged.
+
+Current source SHA-256:
+`106abff49539288a1c28cf64d0564569a7f902c47694072a87b66b1a4dbd3c66`.
+Evidence for this follow-up is under `checks/j2-sw1-spacing/`.
+
+| Check | Current follow-up result |
+| --- | --- |
+| TypeScript / netlist | PASS; netlist has 0 errors and 0 warnings |
+| Schematic placement / placement snapshot | PASS; existing simplification suggestions remain |
+| PCB placement | PASS; 0 errors and 0 warnings |
+| Fitted-part/net/placement comparison | PASS; only J2 moves, plus the routing via |
+| Congestion CLI | Both attempts timed out after 90 seconds; NOT passed |
+| Full routed build / audit | PASS; corrected routing completed in 211.2 seconds, no error records or audit issues |
+| Gerber shorts | PASS on all layers at default resolution and 100 pixels/mm |
+| Full regression suite | PASS, 13 tests including the new 4 mm spacing guard |
+
+The corrected artifact contains 59 fitted components, 161 routed traces and
+178 vias. `build.log`, `audit.log`, `tests.log`, `shorts.log` and
+`shorts-100ppm.log` in the follow-up evidence directory record these results.
+`change-audit.log` compares the unchanged fitted parts, named pin connections
+and other component placements; `model-bounds.log` records the imported-model
+dimensions used for the spacing check. The earlier failed route is preserved
+as `attempt1.circuit.json` with its build/short logs, not used as final output.
+
+Current views: `dist/index/pcb.svg`, `dist/index/schematic.svg` and
+`dist/index/3d.png`. Routed snapshots were refreshed. The placement-only PNG
+is archived as `checks/j2-sw1-spacing/placement-pcb.png`. Current source,
+circuit JSON and BOM fingerprints are recorded in that folder's `sha256.txt`.
+
+The earlier baseline below does not certify the changed follow-up routing.
+
+## Earlier R2 validation baseline
+
 Reviewed `index.circuit.tsx` SHA-256:
 `bb631631a9eb3799390ca006ece4c8aa85c2d05eed2451c226ad54f63a80cae7`.
 Dependencies: tscircuit 0.0.2297, CLI 0.1.2021, capacity-autorouter 0.0.790,
 as installed from `bun.lock`.
 
-## Current checks
+### Earlier baseline checks
 
 | Check | Result | Evidence |
 | --- | --- | --- |
