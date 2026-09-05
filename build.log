@@ -1,0 +1,256 @@
+$ tsci build
+Building 1 file(s)...
+Building index.circuit.tsx...
+Generating circuit JSON...
+Each child in a list should have a unique "key" prop.
+
+Check the render method of `footprint`. See https://react.dev/link/warning-keys for more information.
+Circuit JSON written to dist/index/circuit.json
+<trace#1427(from:.J1 > .VBUS1 to:net.USB_VBUS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1428(from:.J1 > .VBUS2 to:net.USB_VBUS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1429(from:.J1 > .GND1 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1430(from:.J1 > .GND2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1431(from:.J1 > .SH1 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1432(from:.J1 > .CC1 to:net.USB_CC1) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1433(from:.J1 > .CC2 to:net.USB_CC2) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1434(from:.R1 > .pin1 to:net.USB_CC1) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1435(from:.R1 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1436(from:.R2 > .pin1 to:net.USB_CC2) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1437(from:.R2 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1438(from:.D1 > .pin2 to:net.USB_VBUS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1439(from:.D1 > .pin1 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1440(from:.FB1 > .pin1 to:net.USB_VBUS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1441(from:.FB1 > .pin2 to:net.CHARGER_IN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1442(from:.U2 > .IN to:net.CHARGER_IN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1443(from:.U2 > .PMID1 to:net.SYS_RAW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1444(from:.U2 > .PMID2 to:net.SYS_RAW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1445(from:.U2 > .BAT1 to:net.VBAT_SYS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1446(from:.U2 > .BAT2 to:net.VBAT_SYS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1447(from:.U2 > .GND to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1448(from:.U2 > .PG to:net.PMIC_PG) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1449(from:.U2 > .MR to:net.PMIC_MR) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1450(from:.U2 > .CE to:net.PMIC_CE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1451(from:.U2 > .IMAX to:net.PMIC_IMAX) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1452(from:.U2 > .ADCIN to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1453(from:.U2 > .VDD to:net.PMIC_VDD_1V8) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1454(from:.U2 > .INT to:net.PMIC_INT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1455(from:.U2 > .LP to:net.PMIC_LP) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1456(from:.U2 > .LSLDO to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1457(from:.U2 > .VIO to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1458(from:.U2 > .SDA to:net.I2C_SDA) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1459(from:.U2 > .SCL to:net.I2C_SCL) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1460(from:.U2 > .VINLS to:net.SYS_RAW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1461(from:.U2 > .TS to:net.BAT_NTC) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1462(from:.C1 > .pin1 to:net.CHARGER_IN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1463(from:.C1 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1464(from:.C2 > .pin1 to:net.SYS_RAW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1465(from:.C2 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1466(from:.C3 > .pin1 to:net.VBAT_SYS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1467(from:.C3 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1468(from:.C4 > .pin1 to:net.PMIC_VDD_1V8) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1469(from:.C4 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1470(from:.C5 > .pin1 to:net.SYS_RAW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1471(from:.C5 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1472(from:.C6 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1473(from:.C6 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1474(from:.R3 > .pin1 to:net.PMIC_IMAX) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1475(from:.R3 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1476(from:.R4 > .pin1 to:net.BAT_NTC) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1477(from:.R4 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1478(from:.R5 > .pin1 to:net.PMIC_CE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1479(from:.R5 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1480(from:.R6 > .pin1 to:net.PMIC_INT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1481(from:.R6 > .pin2 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1482(from:.R7 > .pin1 to:net.PMIC_PG) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1483(from:.R7 > .pin2 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1484(from:.U3 > .BAT to:net.BAT_PACK_POS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1485(from:.U3 > .SRX to:net.VBAT_SYS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1486(from:.U3 > .BIN to:net.GAUGE_BIN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1487(from:.U3 > .VSS1 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1488(from:.U3 > .VSS2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1489(from:.U3 > .VDD to:net.GAUGE_VDD_1V8) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1490(from:.U3 > .GPOUT to:net.GAUGE_INT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1491(from:.U3 > .SDA to:net.I2C_SDA) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1492(from:.U3 > .SCL to:net.I2C_SCL) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1493(from:.C7 > .pin1 to:net.BAT_PACK_POS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1494(from:.C7 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1495(from:.C8 > .pin1 to:net.GAUGE_VDD_1V8) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1496(from:.C8 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1497(from:.R8 > .pin1 to:net.GAUGE_BIN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1498(from:.R8 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1499(from:.R9 > .pin1 to:net.GAUGE_INT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1500(from:.R9 > .pin2 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1501(from:.R10 > .pin1 to:net.I2C_SDA) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1502(from:.R10 > .pin2 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1503(from:.R11 > .pin1 to:net.I2C_SCL) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1504(from:.R11 > .pin2 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1505(from:.J2 > .BAT_POS to:net.BAT_PACK_POS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1506(from:.J2 > .NTC to:net.BAT_NTC) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1507(from:.J2 > .BAT_NEG to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1508(from:.SW1 > .A1 to:net.PMIC_MR) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1509(from:.SW1 > .B1 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1510(from:.U1 > .VDDR1 to:net.VDDR) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1511(from:.U1 > .VDDR2 to:net.VDDR) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1512(from:.U1 > .VDDS1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1513(from:.U1 > .VDDS2 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1514(from:.U1 > .VDDS3 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1515(from:.U1 > .VDDS4 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1516(from:.U1 > .VDDD to:net.VDDD) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1517(from:.U1 > .DCDC to:net.DCDC_SW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1518(from:.U1 > .RFGND to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1519(from:.U1 > .EGP to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1520(from:.U1 > .ANT to:net.RF_RAW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1521(from:.U1 > .X48P to:net.X48_P) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1522(from:.U1 > .X48N to:net.X48_N) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1523(from:.U1 > .X32P to:net.X32_P) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1524(from:.U1 > .X32N to:net.X32_N) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1525(from:.U1 > .RSTN to:net.MCU_RSTN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1526(from:.U1 > .SWDIO to:net.SWDIO) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1527(from:.U1 > .SWDCK to:net.SWDCK) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1528(from:.U1 > .DIO8 to:net.OLED_SCLK) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1529(from:.U1 > .DIO9 to:net.PMIC_INT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1530(from:.U1 > .DIO10 to:net.GAUGE_INT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1531(from:.U1 > .DIO11 to:net.OLED_CS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1532(from:.U1 > .DIO12 to:net.OLED_DC) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1533(from:.U1 > .DIO13 to:net.OLED_RESET) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1534(from:.U1 > .DIO14 to:net.PMIC_LP) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1535(from:.U1 > .DIO15 to:net.USER_BUTTON) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1536(from:.U1 > .DIO18 to:net.ACC_INT1) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1537(from:.U1 > .DIO19 to:net.OLED_MOSI) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1538(from:.U1 > .DIO20_A11 to:net.ACC_INT2) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1539(from:.U1 > .DIO21_A10 to:net.OLED_EN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1540(from:.U1 > .DIO22_A9 to:net.PMIC_PG) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1541(from:.U1 > .DIO24_A7 to:net.I2C_SCL) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1542(from:.U1 > .DIO0_A5 to:net.I2C_SDA) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1543(from:.L1 > .pin1 to:net.DCDC_SW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1544(from:.L1 > .pin2 to:net.VDDR) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1545(from:.C9 > .pin1 to:net.VDDR) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1546(from:.C9 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1547(from:.C10 > .pin1 to:net.VDDR) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1548(from:.C10 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1549(from:.C11 > .pin1 to:net.VDDD) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1550(from:.C11 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1551(from:.C12 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1552(from:.C12 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1553(from:.C13 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1554(from:.C13 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1555(from:.C14 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1556(from:.C14 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1557(from:.C15 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1558(from:.C15 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1559(from:.C16 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1560(from:.C16 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1561(from:.R12 > .pin1 to:net.MCU_RSTN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1562(from:.R12 > .pin2 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1563(from:.C17 > .pin1 to:net.MCU_RSTN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1564(from:.C17 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1565(from:.Y1 > .pin1 to:net.X48_P) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1566(from:.Y1 > .pin2 to:net.X48_N) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1567(from:.Y2 > .pin1 to:net.X32_P) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1568(from:.Y2 > .pin2 to:net.X32_N) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1569(from:.C18 > .pin1 to:net.X32_P) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1570(from:.C18 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1571(from:.C19 > .pin1 to:net.X32_N) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1572(from:.C19 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1573(from:.C20 > .pin1 to:net.RF_RAW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1574(from:.C20 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1575(from:.L2 > .pin1 to:net.RF_RAW) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1576(from:.L2 > .pin2 to:net.RF_FILTERED) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1577(from:.C21 > .pin1 to:net.RF_FILTERED) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1578(from:.C21 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1579(from:.R13 > .pin1 to:net.RF_FILTERED) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1580(from:.R13 > .pin2 to:net.RF_ANT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1581(from:.AE1 > .FEED to:net.RF_ANT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1582(from:.J4 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1583(from:.J4 > .pin2 to:net.SWDIO) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1584(from:.J4 > .pin3 to:net.SWDCK) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1585(from:.J4 > .pin4 to:net.MCU_RSTN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1586(from:.J4 > .pin5 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1587(from:.U4 > .VDD to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1588(from:.U4 > .VDDIO to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1589(from:.U4 > .GND to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1590(from:.U4 > .GNDIO to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1591(from:.U4 > .SDA to:net.I2C_SDA) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1592(from:.U4 > .SCL to:net.I2C_SCL) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1593(from:.U4 > .SDO to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1594(from:.U4 > .CSB to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1595(from:.U4 > .INT1 to:net.ACC_INT1) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1596(from:.U4 > .INT2 to:net.ACC_INT2) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1597(from:.C22 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1598(from:.C22 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1599(from:.C23 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1600(from:.C23 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1601(from:.U5 > .IN to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1602(from:.U5 > .GND to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1603(from:.U5 > .ON to:net.OLED_EN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1604(from:.U5 > .CT to:net.OLED_CT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1605(from:.U5 > .VOUT to:net.OLED_VCC) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1606(from:.U5 > .QOD to:net.OLED_VCC) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1607(from:.R14 > .pin1 to:net.OLED_EN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1608(from:.R14 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1609(from:.C24 > .pin1 to:net.OLED_CT) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1610(from:.C24 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1611(from:.C25 > .pin1 to:net.OLED_VCC) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1612(from:.C25 > .pin2 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1613(from:.J3 > .pin1 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1614(from:.J3 > .pin2 to:net.OLED_VCC) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1615(from:.J3 > .pin3 to:net.OLED_SCLK) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1616(from:.J3 > .pin4 to:net.OLED_MOSI) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1617(from:.J3 > .pin5 to:net.OLED_RESET) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1618(from:.J3 > .pin6 to:net.OLED_DC) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1619(from:.J3 > .pin7 to:net.OLED_CS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1620(from:.SW2 > .A1 to:net.USER_BUTTON) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1621(from:.SW2 > .B1 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1622(from:.R15 > .pin1 to:net.USER_BUTTON) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1623(from:.R15 > .pin2 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1624(from:.TP1 > .pin1 to:net.CHARGER_IN) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1625(from:.TP2 > .pin1 to:net.BAT_PACK_POS) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1626(from:.TP3 > .pin1 to:net.VCORE) /> is missing a name. Add a name prop to make the trace easier to identify.
+<trace#1627(from:.TP4 > .pin1 to:net.GND) /> is missing a name. Add a name prop to make the trace easier to identify.
+component is facing x+ but should face y- so the connector is accessible from the board edge
+PCB trace is 12.77mm long, exceeding the 10mm maximum
+PCB trace is 11.24mm long, exceeding the 10mm maximum
+PCB trace is 15.77mm long, exceeding the 10mm maximum
+AE1 has no pin with requires_power=true
+AE1 has no pin with requires_ground=true
+<capacitor#505(.BLUETOOTH_PEDOMETER>.C17) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1525 (copper IoU 0.7249).
+<capacitor#133(.BLUETOOTH_PEDOMETER>.C3) /> footprint "cap0402" does not match supplier footprint jlcpcb:C52923 (copper IoU 0.7249).
+<capacitor#468(.BLUETOOTH_PEDOMETER>.C15) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1525 (copper IoU 0.7249).
+<capacitor#444(.BLUETOOTH_PEDOMETER>.C13) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1525 (copper IoU 0.7249).
+<capacitor#523(.BLUETOOTH_PEDOMETER>.C18) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1547 (copper IoU 0.7249).
+<capacitor#420(.BLUETOOTH_PEDOMETER>.C11) /> footprint "cap0402" does not match supplier footprint jlcpcb:C52923 (copper IoU 0.7249).
+<capacitor#256(.BLUETOOTH_PEDOMETER>.C7) /> footprint "cap0402" does not match supplier footprint jlcpcb:C52923 (copper IoU 0.7249).
+<capacitor#408(.BLUETOOTH_PEDOMETER>.C10) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1525 (copper IoU 0.7249).
+<capacitor#157(.BLUETOOTH_PEDOMETER>.C5) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1525 (copper IoU 0.7249).
+<capacitor#535(.BLUETOOTH_PEDOMETER>.C19) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1548 (copper IoU 0.7249).
+<capacitor#432(.BLUETOOTH_PEDOMETER>.C12) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1525 (copper IoU 0.7249).
+<capacitor#693(.BLUETOOTH_PEDOMETER>.C24) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1523 (copper IoU 0.7249).
+<capacitor#268(.BLUETOOTH_PEDOMETER>.C8) /> footprint "cap0402" does not match supplier footprint jlcpcb:C12530 (copper IoU 0.7249).
+<capacitor#547(.BLUETOOTH_PEDOMETER>.C20) /> footprint "cap0201" does not match supplier footprint jlcpcb:C161414 (copper IoU 0.6632).
+<capacitor#647(.BLUETOOTH_PEDOMETER>.C22) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1525 (copper IoU 0.7249).
+<capacitor#571(.BLUETOOTH_PEDOMETER>.C21) /> footprint "cap0201" does not match supplier footprint jlcpcb:C161414 (copper IoU 0.6632).
+<capacitor#456(.BLUETOOTH_PEDOMETER>.C14) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1525 (copper IoU 0.7249).
+<capacitor#705(.BLUETOOTH_PEDOMETER>.C25) /> footprint "cap0402" does not match supplier footprint jlcpcb:C52923 (copper IoU 0.7249).
+<capacitor#659(.BLUETOOTH_PEDOMETER>.C23) /> footprint "cap0402" does not match supplier footprint jlcpcb:C1525 (copper IoU 0.7249).
+PCB trace trace[.U2 > port.SCL, .R11 > port.anode] is too close to trace[.U2 > port.INT, .R6 > port.anode] (gap: 0.024mm)
+PCB trace trace[.U2 > port.SCL, .R11 > port.anode] overlaps with trace[.U2 > port.CE, .R5 > port.anode] (accidental contact)
+PCB trace trace[.U2 > port.SCL, .R11 > port.anode] overlaps with trace[.U2 > port.LP, .U1 > port.pin9] (accidental contact)
+PCB trace trace[.U2 > port.LP, .U1 > port.pin9] overlaps with pcb_smtpad "pcb_port[.U2 > .E3]" (accidental contact)
+PCB trace trace[.U2 > port.INT, .R6 > port.anode] is too close to trace[.U2 > port.CE, .R5 > port.anode] (gap: 0.033mm)
+PCB trace trace[.U2 > port.INT, .R6 > port.anode] overlaps with pcb_smtpad "pcb_port[.U2 > .E2]" (accidental contact)
+PCB trace trace[.U2 > port.VDD, .C4 > port.pos] overlaps with pcb_smtpad "pcb_port[.U2 > .E1]" (accidental contact)
+PCB trace trace[.U2 > port.IMAX, .R3 > port.anode] overlaps with pcb_smtpad "pcb_port[.U2 > .C4]" (accidental contact)
+PCB trace trace[.U2 > port.CE, .R5 > port.anode] overlaps with pcb_smtpad "pcb_port[.U2 > .D2]" (accidental contact)
+Pad pcb_port[.U2 > .E3] and trace trace[.U2 > port.INT, .R6 > port.anode] are too close (clearance: 0.026mm, minimum: 0.04mm)
+Pad pcb_port[.C17 > .pin1] and trace trace[.R6 > port.anode, .U1 > port.pin3] are too close (clearance: 0.017mm, minimum: 0.04mm)
+Pad pcb_port[.U2 > .E3] and trace trace[.U2 > port.CE, .R5 > port.anode] are too close (clearance: 0.003mm, minimum: 0.04mm)
+Pad pcb_port[.U2 > .B1] and trace trace[.U2 > port.MR, .SW1 > port.pin1] are too close (clearance: 0.019mm, minimum: 0.04mm)
+Via pcb_via[#pcb_via_79] and trace trace[.R10 > port.anode, .U4 > port.SDA] are too close (clearance: 0.028mm, minimum: 0.04mm)
+Via pcb_via[#pcb_via_125] and trace trace[.U2 > port.MR, .SW1 > port.pin1] are too close (clearance: 0.033mm, minimum: 0.04mm)
+
+Build complete
+  Circuits  1 passed
+  Output    dist
+
+⚠ Build completed with errors
+Build exiting with code 0: build finished successfully

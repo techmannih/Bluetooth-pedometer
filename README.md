@@ -7,12 +7,17 @@ manager, TI BQ27427 fuel gauge, and a switched SPI connector for a small
 SSD1306 OLED module.
 
 The design source is [`index.circuit.tsx`](./index.circuit.tsx). It generates a
-48.2 mm x 34 mm, 1 mm-thick, 4-layer PCB. Standard passives use native
-tscircuit resistor/capacitor/inductor/diode elements; their exact supplier land
-patterns are resolved with native `footprint="jlcpcb:C..."` references.
-Geometry-sensitive parts use raw JLCPCB imports. All 59 fitted parts retain
-locked LCSC codes—33 unique orderable codes—and resolved OBJ/STEP models. See
+48.2 mm x 34 mm, 1 mm-thick, 4-layer prototype PCB. Standard passives use native
+tscircuit elements and standard footprints (`res0402`, `cap0402`, etc.), as
+requested. Geometry-sensitive parts use raw JLCPCB imports. All 59 fitted parts
+retain locked LCSC codes—33 unique supplier codes. Generic passive footprints
+and CAD must still be checked against the selected supplier part. See
 [`JLCPCB_PARTS.md`](./JLCPCB_PARTS.md) and [`BOM.csv`](./BOM.csv).
+
+**R2 review: not ready to order.** Electrical corrections are implemented, but
+RF/clock layout and fabrication-rule closure remain. Read
+[`DESIGN_REVIEW.md`](./DESIGN_REVIEW.md) before treating a successful build as
+manufacturing approval.
 
 ## Architecture
 
@@ -34,7 +39,7 @@ That separation avoids powering an "off" display through shared bus pull-ups.
 | Function | Part | Reason |
 | --- | --- | --- |
 | BLE MCU | CC2340R53N0RKPR (C45190532) | BLE 5.3, low-power modes, enough GPIO, integrated DC/DC |
-| Motion | BMA400 | sub-uA low-power acquisition and hardware step/activity features |
+| Motion | BMA400 | hardware step counting in normal mode; MCU can sleep between reads |
 | Charger/power path | BQ25150YFP | wearable-oriented charger, power path, programmable load-switch/LDO rail |
 | Fuel gauge | BQ27427YZF | integrated high-side current sensing for a single Li-ion cell |
 | Display switch | TPS22918DBV | disconnects and actively discharges the OLED rail |
@@ -47,11 +52,11 @@ That separation avoids powering an "off" display through shared bus pull-ups.
 | Device | Bus/address | CC2340R5 pin | Other connections |
 | --- | --- | --- | --- |
 | BMA400 | I2C, `0x14` (`SDO=0`) | SDA DIO0; SCL DIO24 | INT1 DIO18, INT2 DIO20 |
-| BQ25150 | I2C, `0x6B` | SDA DIO0; SCL DIO24 | INT DIO9, PG DIO22, LP DIO14 |
+| BQ25150 | I2C, `0x6B` | SDA DIO0; SCL DIO24 | INT DIO9, PG DIO22, /LP DIO14, /CE DIO1 |
 | BQ27427 | I2C, `0x55` | SDA DIO0; SCL DIO24 | GPOUT DIO10 |
 
 R10 and R11 are 10 kOhm pull-ups to VCORE. This value favors battery life; if
-bus rise time is too slow with the assembled harness and display, populate a
+bus rise time is too slow with the assembled board, populate a
 lower value after measuring bus capacitance.
 
 ### OLED SPI connector J3
@@ -81,8 +86,8 @@ J4 is the exact PZ200V-11-05P (C541859) 2.0 mm-pitch SWD header:
 J2 is an exact JLCPCB-imported 3-pin JST-PH battery connector (C131339):
 `CELL+, 10k NTC, GND`. J5 is an exact JLCPCB-imported 4-pin JST-SH service
 connector (C160390): `CHARGER_IN, BAT_PACK_POS, VCORE, GND`. These and every
-other fitted component include an exact supplier code, exact supplier-resolved
-land pattern, and OBJ/STEP CAD model metadata. Use only a
+other fitted component retain an exact supplier code. Native passive land
+patterns are not claimed to be identical to supplier land patterns. Use only a
 protected, rechargeable single-cell Li-ion/LiPo pack whose regulation voltage
 and safe charge current are known. The connector polarity must be checked
 against the selected battery because premade JST battery cables are not
@@ -92,33 +97,64 @@ universally wired the same way.
 
 The BQ25150 LSLDO rail starts at its reset default of 1.8 V. Early firmware must
 write `LDOCTRL (0x1D) = 0xE0` to select 3.0 V before enabling the display or
-starting normal application work. R3 is 1.2 kOhm, setting an approximately
-51 mA hardware input-current ceiling. Charge current and regulation voltage
-still have to be programmed for the exact cell.
+starting normal application work. DIO14 must be high for PMIC I2C on battery;
+allow at least 1 ms after raising it. DIO1 controls /CE, with R5 biasing it high
+while VCORE is present. Keep charging inhibited until the exact cell's settings
+have been programmed and read back. R3 limits charge-current code, **not USB
+input current**; the ~51 mA nominal ceiling assumes ICHARGE_RANGE=0. See the
+[TI BQ25150 data sheet](https://www.ti.com/lit/ds/symlink/bq25150.pdf).
 
-A sensible firmware target is 30–80 uA average with the display normally off,
-short BLE advertisements/connections, the BMA400 doing step detection, and the
-fuel gauge allowed to sleep. At that range, an ideal 100 mAh cell corresponds
-to roughly 7–20 weeks. Real runtime will be lower after cell self-discharge,
-temperature, conversion losses, radio conditions, display use, and reserve
-capacity are included. Measure an assembled unit over its complete use cycle
-before setting a product claim.
+Use `bun run power-budget` for explicit, editable planning assumptions. For
+example, a 100 mAh cell with 80% usable capacity, 50 uA battery-side tracking
+average and 12 mA additional display current predicts about 8.2 weeks at one
+minute of display/day, or 3.6 weeks at ten minutes/day. These are not measured
+values. Measure an assembled unit over its complete use cycle before setting
+a runtime claim. Keep BMA400 in normal mode for baseline hardware step
+counting; ship mode is explicit power-off, not inactivity sleep.
+
+## Project setup
+
+This is a native tscircuit project. Its setup was aligned with a reference
+generated by the installed CLI using `tsci init --yes --no-install` on
+2026-09-05. The scaffold's registry configuration, ignore rules and start
+command were merged into this existing project without replacing the PCB,
+imports, locked dependencies or validation scripts. The package entrypoint is
+`index.circuit.tsx` (not the initializer's generic `index.tsx` metadata).
+
+From this directory, `bun start` or `bunx tsci dev` opens the project. No second
+initialization or conversion is required. Optional AI skill downloads are not
+needed to run the circuit; the existing workspace skill remains available.
+
+The `.gitignore` excludes generated dependencies, caches and diagnostics.
+Already-indexed files are unaffected: existing staged `node_modules/`,
+`.tscircuit/` and `dist/` entries were deliberately left untouched.
 
 ## Build and inspect
 
 ```sh
 bun install
 bun run typecheck
+bunx tsci check netlist index.circuit.tsx
+bunx tsci check schematic-placement index.circuit.tsx
+bun run snapshot:update
+bunx tsci check placement index.circuit.tsx
+bunx tsci check routing-difficulty index.circuit.tsx
 bun run build
+bun run audit
+bunx tsci check shorts dist/index/circuit.json
+bun run test
+bun run power-budget
 bun run dev
 ```
 
 The generated circuit JSON is written under `dist/index/`. `bun run dev` opens
-the interactive schematic/PCB/3D view.
+the interactive schematic/PCB/3D view. `bun run build` now runs the netlist
+check first and audits the routed result afterward; a CLI exit alone no longer
+counts as a clean design. The separate shorts check is still required.
 
-The JLCPCB catalog selection was checked on 2026-09-05. Availability and
-assembly tier are live data; recheck every LCSC code immediately before placing
-an order. Locked supplier references remove CAD/BOM ambiguity, but do not
+Availability and assembly tier are live data; this electrical review is not a
+fresh stock/assembly quotation. Recheck every LCSC code immediately before
+placing an order. Locked supplier references reduce CAD/BOM ambiguity, but do not
 replace electrical, DFM, RF, or first-article validation.
 
 ## Important release gates

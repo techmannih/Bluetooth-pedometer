@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Local environment files (keep safe templates versioned)
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+!.env.*.example
+!.env.*.sample
+!.env.*.template
+
+# IDE files
+.vscode/
+.idea/
+.history/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+._*
+
+# Logs, including rotated logs
+*.log
+*.log.*
+/logs/
+
+# Temporary files and tool caches
+.cache/
+/tmp/
+/temp/
+
+# tscircuit cache and generated diagnostics
+.tscircuit/
+/checks/
+
+# Keep circuit sources, imports, BOM.csv, bun.lock, .npmrc and
+# __snapshots__/ versioned; do not ignore CAD/image files globally.
