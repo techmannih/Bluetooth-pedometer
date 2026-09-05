@@ -4,7 +4,92 @@
 claims. A successful CLI exit is not sufficient: inspect the routed artifact
 and run the separate Gerber copper-short check.
 
-## Latest: U2 preview-error follow-up
+## Latest: native CLI workflow without custom scripts
+
+At the user's request, the deleted custom validation scripts are not restored.
+`package.json` no longer calls `scripts/audit-circuit.mjs`; the `audit`, `test`
+and `power-budget` aliases that referenced the missing directory are removed.
+No dummy-success command or substitute custom checker has been introduced.
+
+`bun run build` now chains the official netlist check, routed build, and
+default all-layer Gerber shorts check with `&&`. The tscircuit skill's native
+verification sequence is retained. This intentionally does not reproduce the
+old project-specific BOM/electrical regression tests or power calculator;
+the planning formula remains documented in `DESIGN_REVIEW.md`.
+
+Fresh typecheck, netlist, schematic-placement and PCB placement exited 0.
+The revised `bun run build` completed end to end with exit 0, including its
+default all-layer Gerber shorts check: **no shorts detected**. Its routed JSON
+contains 161 traces, 158 vias and **zero error records**. Existing supplier
+footprint and metadata advisories remain; this is not a zero-warnings claim.
+`scripts/` is absent and no package command references it. Evidence is under
+the ignored `checks/native-cli-workflow/` directory.
+
+- Source SHA-256 (unchanged): `05d9e59ba72d7ba6656cfde12264fae86704b4ef6b3724c4bfe50254268538cb`
+- Circuit JSON SHA-256: `2921676b9b99d9712d10c6c444a42fcaae0653b6d0cdd195b003ffcd2fc70b0c`
+
+No circuit source, footprint, connectivity, placement, routing rule,
+dependency or lockfile changed.
+The earlier cloud worker-timeout setting remains at 20 minutes. The separate
+official `routing-difficulty` timeout is still unresolved and is not a pass.
+
+## Previous: cloud worker-timeout follow-up
+
+The supplied cloud log shows a worker timeout at **600000 ms**, not an
+installation or TypeScript failure. The router was still advancing through
+`exactGeometryDrcForceImproveSolver` when the worker was replaced. This is
+distinct from the previously recorded `routing-difficulty` checker hang.
+
+The official `build.workerTimeoutMs` option is now **1200000 ms (20 minutes)**
+in `tscircuit.config.json`. The installed CLI schema accepts this setting and
+the worker-build path passes it to the worker pool. An explicit
+`TSCIRCUIT_BUILD_WORKER_TIMEOUT_MS` environment value has higher priority;
+none is set in this local verification environment. The cloud environment
+value and uploaded source hash were not supplied, so a cloud pass cannot be
+inferred from a local result. References: [official schema](https://github.com/tscircuit/cli/blob/main/types/tscircuit.config.schema.json)
+and [worker-pool implementation](https://github.com/tscircuit/cli/blob/main/cli/build/worker-pool.ts).
+
+No PCB source, placement, net, footprint, routing effort, DRC limit or
+dependency changed. This adjusts the worker's time budget, not the solver's
+correctness or performance. The cloud command is `bunx tscircuit build --ci
+--concurrency 4`, not the package build script containing
+`--autorouter-timeout 15m`. One board still uses one worker; concurrency is
+across files.
+
+Fresh local typecheck, netlist, schematic-placement and PCB placement exited
+0. A local run of the exact CI command also exited 0 and produced 161 traces,
+158 vias and zero circuit error records, but an existing local cache was
+present; its default all-layer Gerber shorts check also passed.
+
+**Clean-copy CI verification passed.** Source, imports, config and lockfile
+were copied into `/tmp/pedometer-cloud-ci.vJNTWb` without the original cache,
+installed with `bun install --frozen-lockfile`, then netlist-checked before
+running the exact `bunx tscircuit build --ci --concurrency 4` command. It
+completed successfully in roughly six minutes locally; routing diagnostics
+reached post-processing at 339 seconds. Its artifact contains 59 fitted
+components, 161 traces, 158 vias and **zero error records**. Default and
+100-pixels/mm all-layer Gerber shorts checks both exited 0 with **no shorts**.
+The PCB and 3D images were inspected. Board, component, pad, plated-hole,
+trace, via and copper-pour records match the warm CI artifact exactly.
+
+The tscircuit skill's separate artifact/shorts verification was used because
+the official CLI's CI mode alone is insufficient evidence of a clean board.
+No ignore-DRC option or substitute checker was added. Frozen dependencies
+installed successfully; both installed CLI copies retain the original Git
+blob hash `675f42c276325d65349ca742458344d95c632300`.
+
+- Source SHA-256 (unchanged): `05d9e59ba72d7ba6656cfde12264fae86704b4ef6b3724c4bfe50254268538cb`
+- Config SHA-256: `9b30764fb78572ec97f7e68b7fedf0b615e9d8f858dd1c00ae49d6678697886a`
+- Clean CI circuit JSON SHA-256: `54567af9fc0e4fba2f79fd32b190b5e8c8c4d1263714a03c0d63e859a1ce3f34`
+- Workspace CI circuit JSON SHA-256: `1ae66f31d10d061c06f174d1f7815971830502754ff6ef5254b3b0e4d854167a`
+
+Evidence and the preserved `clean-ci.circuit.json` are under the ignored
+`checks/cloud-worker-timeout/` directory. Hosted verification is still pending;
+no remote job was triggered and no changes were pushed. The separate
+`routing-difficulty` hang and missing package validation scripts described
+below remain unresolved; this does not claim all package commands pass.
+
+## Previous: U2 preview-error follow-up
 
 **Fresh local routed build: zero circuit error records; no shorts in both
 default and 100-pixels/mm all-layer Gerber checks.** The live preview artifact
@@ -143,12 +228,13 @@ timeout (`routing-status.json`: `ETIMEDOUT`, supervisor exit 124). This is
 During this verification, concurrent workspace changes removed the original
 `scripts/` directory. The official `tsci build` completed
 successfully, but `bun run build` then exited 1 because its subsequent
-`scripts/audit-circuit.mjs` no longer exists. The `audit`, `test` and
-`power-budget` package scripts also reference that removed directory; their
-previous passes do not describe the current workspace. These deletions have
-not been undone, and the checks have not been removed or replaced with no-ops.
-Restoring the validation scripts versus intentionally changing the project
-workflow requires user direction. See `checks/unpatched-validation/build.log`.
+`scripts/audit-circuit.mjs` no longer existed. At that point the `audit`, `test`
+and `power-budget` package scripts also referenced that removed directory;
+their previous passes did not describe that workspace. The deletions were
+preserved while awaiting the user's workflow choice.
+This failure was subsequently resolved by the user's choice of a native-only
+workflow; see the latest section above. See `checks/unpatched-validation/build.log`
+for the historical failure.
 The official CLI dev server was restarted and its page returned HTTP 200.
 
 ## Historical: experimental patched-CLI validation (withdrawn)

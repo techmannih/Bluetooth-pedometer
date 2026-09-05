@@ -53,10 +53,17 @@ means no detected copper short, not that these rules are manufacturable.
 
 ## Battery-life planning
 
-Run `bun run power-budget` or `bun run power-budget 150` for a different mAh
-capacity. The example uses 80% usable capacity, 50 uA total battery-side
+No custom script is required for this planning calculation. The example uses
+80% usable capacity, 50 uA total battery-side
 tracking average (including radio/gauge) and an extra 12 mA while displaying.
 These are explicit assumptions, not measured performance.
+
+For capacity in mAh and daily display time in seconds:
+
+```text
+average_mA = tracking_uA / 1000 + display_extra_mA * display_seconds_per_day / 86400
+runtime_days = capacity_mAh * usable_fraction / average_mA / 24
+```
 
 For 100 mAh: 1 minute of display/day gives about 8.2 weeks; 5 minutes gives
 5.2 weeks; 10 minutes gives 3.6 weeks. Replace both current assumptions with

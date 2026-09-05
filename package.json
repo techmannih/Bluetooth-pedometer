@@ -8,13 +8,10 @@
   "scripts": {
     "dev": "tsci dev",
     "start": "tsci dev",
-    "build": "tsci check netlist index.circuit.tsx && tsci build index.circuit.tsx --all-images --pcb-png --schematic-png --autorouter-timeout 15m && node scripts/audit-circuit.mjs",
+    "build": "tsci check netlist index.circuit.tsx && tsci build index.circuit.tsx --all-images --pcb-png --schematic-png --autorouter-timeout 15m && tsci check shorts dist/index/circuit.json",
     "snapshot": "tsci snapshot index.circuit.tsx",
     "snapshot:update": "tsci check netlist index.circuit.tsx && tsci build index.circuit.tsx --routing-disabled --pcb-png && tsci snapshot index.circuit.tsx --update",
-    "typecheck": "tsc --noEmit",
-    "audit": "node scripts/audit-circuit.mjs",
-    "power-budget": "node scripts/power-budget.mjs",
-    "test": "node --test scripts/*.test.mjs"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/react": "^19.2.18",
