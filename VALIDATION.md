@@ -4,7 +4,68 @@
 claims. A successful CLI exit is not sufficient: inspect the routed artifact
 and run the separate Gerber copper-short check.
 
-## Latest: J1 mounting-slot edge clearance
+## Latest: U2 preview-error follow-up
+
+**Fresh local routed build: zero circuit error records; no shorts in both
+default and 100-pixels/mm all-layer Gerber checks.** The live preview artifact
+has not been independently verified; this is not an all-commands-pass or
+fabrication-release claim. Earlier hashes below describe previous revisions.
+
+The reported preview showed an LSLDO/VIO trace-to-via overlap and a /PG
+trace too close to U2's /MR (C1) ball. Before changes, the saved routed build
+had zero error records and the dev file-server's source SHA-256 matched the
+local source exactly. Thus an outdated source file was not established as
+the cause. The dev preview bundles a different core runtime (embedded version
+0.0.1634, reporting 0.0.1635) from the installed project core 0.0.1654; this
+is an observed runtime difference, not proof of the precise cause of the
+reported route. No browser connection or exported live-preview JSON was
+available, so that displayed artifact has not been independently verified.
+
+U2's LSLDO escape is now at D4; VIO has a short horizontal escape immediately
+east of E1; /PG escapes at B1. Subsequent full reroutes exposed actual U4
+VCORE/GND, PMIC VDD/ground and MCU reset/VDDR contacts. They were checked with
+the separate Gerber checker, not dismissed based on successful build exits.
+U2 VDD now escapes at D1, U4 ground at pin 9, and MCU reset at pin 25.
+A subsequent run exposed insufficient SCL-via clearance and a ground-via
+contact at MCU VDDR2. The SCL via moved closer to E3 and MCU RFGND now has
+direct local plane access at pin 40.
+The new/adjusted vias use 0.2 mm copper / 0.1 mm drill; the existing four-layer
+via-in-pad rules and filled/capped fabrication release requirements remain.
+No fitted part, pin assignment, component placement or DRC limit changed.
+
+Typecheck, netlist, schematic-placement, placement snapshot and PCB placement
+all exited 0 on the final source. Netlist reports zero errors / zero warnings;
+PCB placement reports no placement issues. The direct, official `bunx tsci
+build index.circuit.tsx --all-images --pcb-png --schematic-png
+--autorouter-debug --autorouter-debug-dir checks/u2-preview-clearance/autorouter-r4
+--autorouter-dump-srj all --autorouter-timeout 15m` exited 0 and reported one
+passed circuit. Its routed JSON contains 59 fitted components, 161 traces,
+158 vias and zero error records. Both `bunx tsci check shorts
+dist/index/circuit.json` and the additional `--pixels-per-mm 100` run exited 0
+and reported no shorts. The final PCB image and routed-phase image were
+visually inspected. The tscircuit skill's separate shorts checks guided the
+local escape corrections rather than relying on build exit status alone.
+
+The unmodified routing-difficulty command again produced no report within
+45 seconds and was stopped by the diagnostic timeout (`ETIMEDOUT`, supervisor
+exit 124): **NOT PASSED**. Missing package validation scripts described below
+remain unresolved; direct CLI build success does not mean `bun run build`,
+`audit`, `test` or `power-budget` have passed.
+
+- Source SHA-256: `05d9e59ba72d7ba6656cfde12264fae86704b4ef6b3724c4bfe50254268538cb`
+- Circuit JSON SHA-256: `58a9d1d2ada724f577fc67d81decbfa1c9d040a343ba411285ee996bc4a4390b`
+- BOM SHA-256 (unchanged): `353113b9b7550757aefdc2cef108f5d0868130ce6b660a1370527ede8bfe6758`
+
+After the final build, the dev file-server returned HTTP 200 and its source
+hash matched the final source above. This verifies the served source, not
+the rendered preview's routing. If the preview still shows errors after a
+refresh, export its Circuit JSON for comparison with the verified local build.
+
+Evidence and intermediate failing routes are in the ignored
+`checks/u2-preview-clearance/` directory. Dependencies remain official and
+unmodified; no checker was replaced or suppressed.
+
+## Previous: J1 mounting-slot edge clearance
 
 J1 moved 1 mm inward, from x = -20.6 to -19.6 mm. The complete imported
 USB-C footprint moved together; its mounting-slot dimensions, pin spacing,
