@@ -4,7 +4,65 @@
 claims. A successful CLI exit is not sufficient: inspect the routed artifact
 and run the separate Gerber copper-short check.
 
-## Latest: J2 / SW1 spacing follow-up
+## Latest: complete command-workflow validation
+
+All twelve finite commands below completed with exit code 0 in the documented
+order on 2026-09-05. `bun run dev` then started successfully; the page and
+`/api/files/list` both returned HTTP 200. This verifies server startup/API
+availability, not every interactive browser action. Evidence is in the ignored
+`checks/command-validation/` directory.
+
+| Command | Result | Log |
+| --- | --- | --- |
+| `bun install` | PASS | `install.log` |
+| `bun run typecheck` | PASS | `typecheck.log` |
+| `bunx tsci check netlist index.circuit.tsx` | PASS; 0 errors / 0 warnings | `netlist.log` |
+| `bunx tsci check schematic-placement index.circuit.tsx` | PASS; trace-simplification suggestions remain | `schematic-placement.log` |
+| `bun run snapshot:update` | PASS; fresh placement-only build and snapshots | `snapshot-update.log` |
+| `bunx tsci check placement index.circuit.tsx` | PASS; 0 errors / 0 warnings | `placement.log` |
+| `bunx tsci check routing-difficulty index.circuit.tsx` | PASS; completed congestion report, not zero congestion | `routing-difficulty.log` |
+| `bun run build` | PASS; routed output and automatic audit | `build.log` |
+| `bun run audit` | PASS; zero issues | `audit.log` |
+| `bunx tsci check shorts dist/index/circuit.json` | PASS; no shorts | `shorts.log` |
+| `bun run test` | PASS; 20 tests, 0 failures/skips | `tests.log` |
+| `bun run power-budget` | PASS; planning estimates only | `power-budget.log` |
+| `bun run dev` | PASS; server startup and HTTP smoke checks | `dev.log` |
+
+The circuit source and BOM are unchanged. Current routed output contains 59
+fitted components, 161 traces, 178 vias and zero circuit error records.
+The additional all-layer Gerber check at 100 pixels/mm also reports no shorts
+(`shorts-100ppm.log`).
+
+- Source SHA-256: `106abff49539288a1c28cf64d0564569a7f902c47694072a87b66b1a4dbd3c66`
+- Circuit JSON SHA-256: `3bc0f670adaa15e8b82e76f5dd4c29cd758115963edd55d39d1fb4f8b065673c`
+- BOM SHA-256: `353113b9b7550757aefdc2cef108f5d0868130ce6b660a1370527ede8bfe6758`
+
+### Workflow fixes and remaining advisories
+
+- A versioned [Bun patch](./patches/README.md) fixes the CLI congestion hang.
+  Analysis now uses the project's converter and routing engine, preserving
+  board clearances, via sizes and keepouts. Failed/incomplete solvers throw;
+  source checks no longer reuse cached artifacts from a different render mode.
+- A fresh temporary `bun install --frozen-lockfile` applied the patch and passed
+  all seven CLI regression tests. These tests are included in the 20-test suite.
+- Snapshot updates deliberately prepare placement-only output before routing;
+  the subsequent full build replaces it with routed output. Only the main
+  board is discovered, and generated checks/builds/logs are excluded from the
+  dev watcher. Full builds refresh PCB/schematic PNGs as well as SVG/3D views.
+- An intermediate run logged transient model-CDN `ECONNRESET` errors. Its log
+  is retained as `routing-with-cdn-errors.log`; the final full workflow rerun
+  completed without those errors. Future online model fetches still depend
+  on external service availability.
+- The congestion report contains estimates up to 10.8%; this is an advisory
+  routing-risk analysis, not a copper-short check or manufacturing approval.
+  Existing native/supplier footprint differences, automatic unnamed-trace and
+  imported-symbol metadata advisories remain visible. No error checks were
+  disabled, and no PCB rules were relaxed.
+- The RF, manufacturing-stackup and battery/firmware release gates below and
+  in `DESIGN_REVIEW.md` / `FABRICATION_NOTES.md` still apply. Passing commands
+  does not make this board fabrication-released or guarantee battery runtime.
+
+## Previous: J2 / SW1 spacing follow-up
 
 J2 and its BAT legend moved 4 mm left, from x = -14 to -18 mm. SW1 stays at
 its original location. The horizontal pad-bound gap increases from 0.075 to

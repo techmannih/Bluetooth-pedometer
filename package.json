@@ -8,9 +8,9 @@
   "scripts": {
     "dev": "tsci dev",
     "start": "tsci dev",
-    "build": "tsci check netlist index.circuit.tsx && tsci build index.circuit.tsx --all-images --autorouter-timeout 15m && node scripts/audit-circuit.mjs",
-    "snapshot": "tsci snapshot",
-    "snapshot:update": "tsci snapshot --update",
+    "build": "tsci check netlist index.circuit.tsx && tsci build index.circuit.tsx --all-images --pcb-png --schematic-png --autorouter-timeout 15m && node scripts/audit-circuit.mjs",
+    "snapshot": "tsci snapshot index.circuit.tsx",
+    "snapshot:update": "tsci check netlist index.circuit.tsx && tsci build index.circuit.tsx --routing-disabled --pcb-png && tsci snapshot index.circuit.tsx --update",
     "typecheck": "tsc --noEmit",
     "audit": "node scripts/audit-circuit.mjs",
     "power-budget": "node scripts/power-budget.mjs",
@@ -20,5 +20,8 @@
     "@types/react": "^19.2.18",
     "tscircuit": "^0.0.2297",
     "typescript": "^5.0.0"
+  },
+  "patchedDependencies": {
+    "@tscircuit/cli@0.1.2021": "patches/@tscircuit%2Fcli@0.1.2021.patch"
   }
 }

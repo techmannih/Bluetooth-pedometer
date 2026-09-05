@@ -126,8 +126,9 @@ initialization or conversion is required. Optional AI skill downloads are not
 needed to run the circuit; the existing workspace skill remains available.
 
 The `.gitignore` excludes generated dependencies, caches and diagnostics.
-Already-indexed files are unaffected: existing staged `node_modules/`,
-`.tscircuit/` and `dist/` entries were deliberately left untouched.
+Previously tracked `node_modules/`, `.tscircuit/`, `dist/`, `checks/` and logs
+have been untracked; source, imports, BOM, lockfile and snapshot baselines stay
+versioned.
 
 ## Build and inspect
 
@@ -151,6 +152,21 @@ The generated circuit JSON is written under `dist/index/`. `bun run dev` opens
 the interactive schematic/PCB/3D view. `bun run build` now runs the netlist
 check first and audits the routed result afterward; a CLI exit alone no longer
 counts as a clean design. The separate shorts check is still required.
+
+`snapshot:update` first creates a **placement-only** build and PNG, then updates
+the main board's snapshots. It replaces `dist/index/circuit.json` with an
+unrouted artifact: run the subsequent full `build` before `audit`, `shorts` or
+the integration tests. Snapshot discovery is restricted to `index.circuit.tsx`
+so archived failed/debug circuits are not included. Full builds refresh the
+PCB and schematic PNGs as well as SVG/3D views. Generated checks, builds and
+logs are excluded from the dev server's file watcher as well.
+
+`bun install` applies a versioned [CLI compatibility patch](./patches/README.md)
+for the congestion-check hang and wrong-mode cached artifacts. It uses the
+project's existing routing rules and throws on failure; it does not suppress
+DRC errors. `routing-difficulty` may still print congestion estimates, and
+schematic checks may offer trace-simplification suggestions. Neither is a
+manufacturing approval. `dev` is a long-running server; stop it with Ctrl+C.
 
 Availability and assembly tier are live data; this electrical review is not a
 fresh stock/assembly quotation. Recheck every LCSC code immediately before
