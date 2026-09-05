@@ -25,6 +25,17 @@ It produced no report within 45 seconds and was stopped by the diagnostic
 timeout (`routing-status.json`: `ETIMEDOUT`, supervisor exit 124). This is
 **NOT PASSED**; no alternate checker or modified dependency was used.
 
+During this verification, concurrent workspace changes removed the original
+`scripts/` directory. The official `tsci build` completed
+successfully, but `bun run build` then exited 1 because its subsequent
+`scripts/audit-circuit.mjs` no longer exists. The `audit`, `test` and
+`power-budget` package scripts also reference that removed directory; their
+previous passes do not describe the current workspace. These deletions have
+not been undone, and the checks have not been removed or replaced with no-ops.
+Restoring the validation scripts versus intentionally changing the project
+workflow requires user direction. See `checks/unpatched-validation/build.log`.
+The official CLI dev server was restarted and its page returned HTTP 200.
+
 ## Historical: experimental patched-CLI validation (withdrawn)
 
 With the now-withdrawn patch, all twelve finite commands below completed with
@@ -66,7 +77,8 @@ The additional all-layer Gerber check at 100 pixels/mm also reports no shorts
   source checks did not reuse cached artifacts from a different render mode.
 - A fresh temporary `bun install --frozen-lockfile` applied the patch and passed
   all seven CLI regression tests. Those patch-only tests have since been removed;
-  the original 13 board/power-budget tests are retained.
+  the original 13 board/power-budget tests were separate from this patch.
+  See the current status above for the subsequent removal of `scripts/`.
 - Snapshot updates deliberately prepare placement-only output before routing;
   the subsequent full build replaces it with routed output. Only the main
   board is discovered, and generated checks/builds/logs are excluded from the
