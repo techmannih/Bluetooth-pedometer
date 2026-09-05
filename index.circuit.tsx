@@ -80,7 +80,7 @@ export const BluetoothPedometer = () => (
     <TYPE_C_31_M_12
       name="J1"
       schSheetName="power"
-      pcbX={-20.6}
+      pcbX={-19.6}
       pcbY={0}
       pcbRotation={270}
       allowOffBoard
@@ -102,8 +102,8 @@ export const BluetoothPedometer = () => (
     />
     <resistor name="R1" resistance="5.1k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF5101TCE" supplierPartNumbers={{ jlcpcb: ["C25905"] }} schSheetName="power" pcbX={-20} pcbY={7} schX={-8} schY={5.4} connections={{ pin1: "net.USB_CC1", pin2: "net.GND" }} />
     <resistor name="R2" resistance="5.1k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF5101TCE" supplierPartNumbers={{ jlcpcb: ["C25905"] }} schSheetName="power" pcbX={-20} pcbY={-7} schX={-8} schY={3.4} connections={{ pin1: "net.USB_CC2", pin2: "net.GND" }} />
-    <diode name="D1" variant="tvs" footprint="sod323" manufacturerPartNumber="PESD5V0S1BA" supplierPartNumbers={{ jlcpcb: ["C2827694"] }} schSheetName="power" pcbX={-16.2} pcbY={-1.5} pcbRotation={90} schX={-6.5} schY={3.4} connections={{ pin1: "net.GND", pin2: "net.USB_VBUS" }} />
-    <BLM18PG221SN1D name="FB1" schSheetName="power" pcbX={-15.5} pcbY={2} schX={-6} schY={6.383} connections={{ pin1: "net.USB_VBUS", pin2: "net.CHARGER_IN" }} />
+    <diode name="D1" variant="tvs" footprint="sod323" manufacturerPartNumber="PESD5V0S1BA" supplierPartNumbers={{ jlcpcb: ["C2827694"] }} schSheetName="power" pcbX={-15.5} pcbY={-2.8} pcbRotation={90} schX={-6.5} schY={3.4} connections={{ pin1: "net.GND", pin2: "net.USB_VBUS" }} />
+    <BLM18PG221SN1D name="FB1" schSheetName="power" pcbX={-14.7} pcbY={2} schX={-6} schY={6.383} connections={{ pin1: "net.USB_VBUS", pin2: "net.CHARGER_IN" }} />
 
     {/* Wearable charger/power path. PMID feeds the default-on programmable LDO. */}
     <BQ25150YFPR
@@ -142,6 +142,8 @@ export const BluetoothPedometer = () => (
     <via name="U2_VIO_ESCAPE" pcbX={-8.9} pcbY={1.400052} connectsTo="net.VCORE" outerDiameter="0.3mm" holeDiameter="0.1mm" />
     {/* Keep SCL's layer change clear of the PMIC interrupt escape. */}
     <via name="U2_SCL_ESCAPE" pcbX={-8.9} pcbY={2.199898} connectsTo="net.I2C_SCL" outerDiameter="0.3mm" holeDiameter="0.1mm" />
+    {/* Escape /LP at its D3 ball so it does not cross the VCORE fanout. */}
+    <via name="U2_LP_ESCAPE" pcbX={-10.09995} pcbY={2.199898} connectsTo="net.PMIC_LP" outerDiameter="0.2mm" holeDiameter="0.1mm" />
     {/* Local ground escape prevents U2's A4 ball from crossing the IN trace. */}
     <via name="U2_GND_ESCAPE" pcbX={-11.8} pcbY={3.2} connectsTo="net.GND" outerDiameter="0.3mm" holeDiameter="0.1mm" />
     <capacitor name="C1" capacitance="4.7uF" maxVoltageRating="10V" footprint="cap0603" manufacturerPartNumber="CL10A475KP8NNNC" supplierPartNumbers={{ jlcpcb: ["C1705"] }} schSheetName="power" pcbX={-12.5} pcbY={4.7} schX={-4.5} schY={5.8} schOrientation="vertical" connections={{ pin1: "net.CHARGER_IN", pin2: "net.GND" }} />

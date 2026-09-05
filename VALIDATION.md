@@ -4,6 +4,60 @@
 claims. A successful CLI exit is not sufficient: inspect the routed artifact
 and run the separate Gerber copper-short check.
 
+## Latest: J1 mounting-slot edge clearance
+
+J1 moved 1 mm inward, from x = -20.6 to -19.6 mm. The complete imported
+USB-C footprint moved together; its mounting-slot dimensions, pin spacing,
+rotation and part selection are unchanged. Relative to the left board edge
+at x = -24.1 mm, the nearest slot drill edge is now **1.026 mm inside** and
+its copper edge is **0.826 mm inside**. These measurements account for the
+footprint's 270-degree rotation, not just the component bounding box.
+The connector mouth still overhangs the edge for cable access; the existing
+`allowOffBoard` setting was not added or changed to obtain a passing result.
+
+To clear J1's assembly courtyard, D1 moved from (-16.2, -1.5) to
+(-15.5, -2.8) mm and FB1 moved from (-15.5, 2) to (-14.7, 2) mm.
+No other fitted component placement, electrical connection, board dimension,
+footprint or routing rule changed.
+
+The first full reroute introduced a VCORE / PMIC_LP contact near U2, confirmed
+by a circuit trace-error record and the all-layer Gerber shorts check at
+approximately (-9.099, 2.685) mm. The router itself reported zero errors,
+so its status alone was insufficient. A local `U2_LP_ESCAPE` via now anchors
+the /LP layer change at U2's D3 ball, using the existing 0.2 mm outer / 0.1 mm
+drill dimensions and already-enabled via-in-pad policy. The required filled
+via-in-pad manufacturing review remains a release gate; no rule was relaxed.
+
+Fresh typecheck, netlist, schematic-placement, placement snapshot and PCB
+placement checks exited 0. Netlist reports 0 errors / 0 warnings; PCB
+placement reports no placement issues, and the placement artifact contains
+zero circuit error records. Existing schematic trace-simplification
+suggestions and supplier/native-footprint advisories remain.
+
+The official, unmodified routing-difficulty command again timed out after
+45 seconds (`ETIMEDOUT`, supervisor exit 124): **NOT PASSED**. Evidence for
+this change, including rotated slot-edge measurements, is under the ignored
+`checks/j1-edge-clearance/` directory. The older routed-artifact hashes below
+refer to earlier placements, not this change.
+
+The final direct, unmodified `bunx tsci build index.circuit.tsx --all-images
+--pcb-png --schematic-png --autorouter-timeout 15m` completed successfully.
+The routed artifact contains 59 fitted components, 161 traces, 168 vias and
+**zero circuit error records**. Both the default all-layer Gerber shorts
+check and the additional 100-pixels/mm check report **no shorts**. The final
+PCB image was inspected and the slot clearances were remeasured on that
+routed artifact. The tscircuit skill's separate shorts check caught the first
+reroute's contact and prompted the local /LP escape correction above.
+
+- Source SHA-256: `a99f73e9c4564c9488fe54253452800fe5841a54c063075a18916f0fd91e8546`
+- Circuit JSON SHA-256: `952416286cf056eefa942ddc214376d635bf1549b91858583437bcc006118021`
+- BOM SHA-256 (unchanged): `353113b9b7550757aefdc2cef108f5d0868130ce6b660a1370527ede8bfe6758`
+
+A concurrent edit to J1's imported 3D-model origin was preserved; the physical
+footprint geometry was not changed. The checks above validate PCB geometry,
+not mechanical alignment of that separate CAD-model edit. Package-script
+limitations described below remain; this is not an all-commands-pass claim.
+
 ## Current policy: official, unmodified dependencies
 
 The experimental dependency patch has been withdrawn at the user's request.
