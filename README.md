@@ -161,12 +161,14 @@ so archived failed/debug circuits are not included. Full builds refresh the
 PCB and schematic PNGs as well as SVG/3D views. Generated checks, builds and
 logs are excluded from the dev server's file watcher as well.
 
-`bun install` applies a versioned [CLI compatibility patch](./patches/README.md)
-for the congestion-check hang and wrong-mode cached artifacts. It uses the
-project's existing routing rules and throws on failure; it does not suppress
-DRC errors. `routing-difficulty` may still print congestion estimates, and
-schematic checks may offer trace-simplification suggestions. Neither is a
-manufacturing approval. `dev` is a long-running server; stop it with Ctrl+C.
+Use official, unmodified dependencies: no `patchedDependencies`, edits to
+`node_modules`, monkey-patches or replacement CLI checks. The locked upstream
+CLI 0.1.2021 has a known `routing-difficulty` hang; do not count an incomplete
+run as a pass. Resolve tooling defects through an official release rather
+than a local dependency patch. See `VALIDATION.md` for the current results.
+Schematic simplification and supplier-footprint advisories may remain.
+Successful checks are not manufacturing approval. `dev` is a long-running
+server; stop it with Ctrl+C.
 
 Availability and assembly tier are live data; this electrical review is not a
 fresh stock/assembly quotation. Recheck every LCSC code immediately before

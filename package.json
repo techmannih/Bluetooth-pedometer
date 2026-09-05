@@ -20,8 +20,5 @@
     "@types/react": "^19.2.18",
     "tscircuit": "^0.0.2297",
     "typescript": "^5.0.0"
-  },
-  "patchedDependencies": {
-    "@tscircuit/cli@0.1.2021": "patches/@tscircuit%2Fcli@0.1.2021.patch"
   }
 }

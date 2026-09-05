@@ -4,10 +4,31 @@
 claims. A successful CLI exit is not sufficient: inspect the routed artifact
 and run the separate Gerber copper-short check.
 
-## Latest: complete command-workflow validation
+## Current policy: official, unmodified dependencies
 
-All twelve finite commands below completed with exit code 0 in the documented
-order on 2026-09-05. `bun run dev` then started successfully; the page and
+The experimental dependency patch has been withdrawn at the user's request.
+`patchedDependencies` is absent from both `package.json` and `bun.lock`, the
+patch files and their seven patch-only tests are absent, and `bun install`
+restored the official CLI 0.1.2021. Its installed `dist/cli/main.js` Git blob
+hash matches the original unmodified package:
+`675f42c276325d65349ca742458344d95c632300`.
+
+Do not patch dependencies, modify installed package code, monkey-patch the
+runtime, or substitute a custom checker to obtain a passing CLI result.
+The upstream `routing-difficulty` issue remains unresolved. The historical
+patched run below is **not** an all-pass result for the official CLI.
+Fresh unpatched verification evidence is under `checks/unpatched-validation/`.
+
+The unmodified CLI's routing-difficulty check was retried after the netlist,
+schematic-placement, fresh placement snapshot and PCB-placement checks passed.
+It produced no report within 45 seconds and was stopped by the diagnostic
+timeout (`routing-status.json`: `ETIMEDOUT`, supervisor exit 124). This is
+**NOT PASSED**; no alternate checker or modified dependency was used.
+
+## Historical: experimental patched-CLI validation (withdrawn)
+
+With the now-withdrawn patch, all twelve finite commands below completed with
+exit code 0 in the documented order on 2026-09-05. `bun run dev` then started successfully; the page and
 `/api/files/list` both returned HTTP 200. This verifies server startup/API
 availability, not every interactive browser action. Evidence is in the ignored
 `checks/command-validation/` directory.
@@ -37,14 +58,15 @@ The additional all-layer Gerber check at 100 pixels/mm also reports no shorts
 - Circuit JSON SHA-256: `3bc0f670adaa15e8b82e76f5dd4c29cd758115963edd55d39d1fb4f8b065673c`
 - BOM SHA-256: `353113b9b7550757aefdc2cef108f5d0868130ce6b660a1370527ede8bfe6758`
 
-### Workflow fixes and remaining advisories
+### Historical workflow changes and remaining advisories
 
-- A versioned [Bun patch](./patches/README.md) fixes the CLI congestion hang.
-  Analysis now uses the project's converter and routing engine, preserving
+- An experimental Bun patch addressed the CLI congestion hang in this historical
+  run only. It has since been removed. Analysis used the project's converter and routing engine, preserving
   board clearances, via sizes and keepouts. Failed/incomplete solvers throw;
-  source checks no longer reuse cached artifacts from a different render mode.
+  source checks did not reuse cached artifacts from a different render mode.
 - A fresh temporary `bun install --frozen-lockfile` applied the patch and passed
-  all seven CLI regression tests. These tests are included in the 20-test suite.
+  all seven CLI regression tests. Those patch-only tests have since been removed;
+  the original 13 board/power-budget tests are retained.
 - Snapshot updates deliberately prepare placement-only output before routing;
   the subsequent full build replaces it with routed output. Only the main
   board is discovered, and generated checks/builds/logs are excluded from the
