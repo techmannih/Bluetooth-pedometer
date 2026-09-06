@@ -82,7 +82,7 @@ export const BluetoothPedometer = () => (
     layers={4}
     solderMaskColor="#173f2f"
     defaultTraceWidth="0.1mm"
-    minTraceWidth="0.075mm"
+    minTraceWidth="0.1mm"
     minTraceToPadEdgeClearance="0.05mm"
     minPadEdgeToPadEdgeClearance="0.1mm"
     minViaEdgeToPadEdgeClearance="0.1mm"
