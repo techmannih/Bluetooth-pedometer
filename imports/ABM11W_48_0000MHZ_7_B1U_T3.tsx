@@ -19,17 +19,16 @@ export const ABM11W_48_0000MHZ_7_B1U_T3 = (props: ChipProps<typeof pinLabels>) =
       pinAttributes={pinAttributes}
       symbol={
         <symbol>
-          <port name="pin1" pinNumber={1} aliases={["1"]} direction="left" schX={-0.6} schY={-0.2} schStemLength={0.2} />
-          <port name="pin3" pinNumber={3} aliases={["3"]} direction="right" schX={0.6} schY={0.2} schStemLength={0.2} />
-          <port name="pin4" pinNumber={4} aliases={["GND2", "4"]} direction="left" schX={-0.6} schY={0.2} schStemLength={0.2} />
-          <port name="pin2" pinNumber={2} aliases={["GND1", "2"]} direction="right" schX={0.6} schY={-0.2} schStemLength={0.2} />
-          <schematicrect schX={0} schY={0} width={0.8} height={0.8} strokeWidth={0.02} color="#880000" />
-          <schematiccircle center={{ x: -0.3, y: -0.3 }} radius={0.03} strokeWidth={0.02} color="#880000" isFilled fillColor="#880000" />
-          <schematicpath points={[{ x: -0.1, y: -0.14 }, { x: -0.1, y: 0.14 }]} strokeColor="#881100" />
-          <schematicpath points={[{ x: 0.1, y: -0.14 }, { x: 0.1, y: 0.14 }]} strokeColor="#881100" />
-          <schematicpath points={[{ x: -0.4, y: -0.2 }, { x: -0.2, y: -0.2 }, { x: -0.2, y: 0 }, { x: -0.1, y: 0 }]} strokeColor="#880000" />
-          <schematicpath points={[{ x: 0.4, y: 0.2 }, { x: 0.2, y: 0.2 }, { x: 0.2, y: 0 }, { x: 0.1, y: 0 }]} strokeColor="#880000" />
-          <schematicrect schX={0} schY={0} width={0.08} height={0.28} strokeWidth={0.02} color="#880000" />
+          <port name="pin1" pinNumber={1} aliases={["1"]} direction="left" schX={-0.6} schY={0} schStemLength={0.2} />
+          <port name="pin3" pinNumber={3} aliases={["3"]} direction="right" schX={0.6} schY={0} schStemLength={0.2} />
+          <port name="pin2" pinNumber={2} aliases={["GND1", "2"]} direction="down" schX={-0.2} schY={-0.45} schStemLength={0.15} />
+          <port name="pin4" pinNumber={4} aliases={["GND2", "4"]} direction="down" schX={0.2} schY={-0.45} schStemLength={0.15} />
+          <schematicpath points={[{ x: -0.4, y: 0 }, { x: -0.15, y: 0 }]} strokeColor="#880000" strokeWidth={0.02} />
+          <schematicpath points={[{ x: -0.15, y: -0.25 }, { x: -0.15, y: 0.25 }]} strokeColor="#880000" strokeWidth={0.03} />
+          <schematicrect schX={0} schY={0} width={0.16} height={0.4} strokeWidth={0.02} color="#880000" />
+          <schematicpath points={[{ x: 0.15, y: -0.25 }, { x: 0.15, y: 0.25 }]} strokeColor="#880000" strokeWidth={0.03} />
+          <schematicpath points={[{ x: 0.15, y: 0 }, { x: 0.4, y: 0 }]} strokeColor="#880000" strokeWidth={0.02} />
+          <schematicpath points={[{ x: -0.25, y: -0.3 }, { x: 0.25, y: -0.3 }]} strokeColor="#880000" strokeWidth={0.02} />
         </symbol>
       }
       supplierPartNumbers={{
