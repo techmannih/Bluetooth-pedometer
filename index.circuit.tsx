@@ -133,9 +133,9 @@ export const BluetoothPedometer = () => (
         TS: "net.BAT_NTC",
       }}
     />
-    {/* Escape LSLDO north of D4 and VIO east of E1 without drilling pads. */}
+    {/* Escape LSLDO north of D4 without drilling its pad. Let the autorouter
+        place VIO's layer transition so it cannot duplicate a nearby fixed via. */}
     <via name="U2_LDO_ESCAPE" pcbX={-10.09995} pcbY={3} connectsTo="net.VCORE" outerDiameter="0.2mm" holeDiameter="0.1mm" />
-    <via name="U2_VIO_ESCAPE" pcbX={-9.2499} pcbY={1.400052} connectsTo="net.VCORE" outerDiameter="0.2mm" holeDiameter="0.1mm" />
     {/* Escape /PG south of B1, clear of the adjacent /MR (C1) ball. */}
     <via name="U2_PG_ESCAPE" pcbX={-10.90005} pcbY={1} connectsTo="net.PMIC_PG" outerDiameter="0.2mm" holeDiameter="0.1mm" />
     {/* Drop VDD south of D1, clear of the ADCIN ground fanout. */}
@@ -157,7 +157,8 @@ export const BluetoothPedometer = () => (
         1–4.7 uF recommended LDO output-capacitance range. */}
     <capacitor name="C6" capacitance="2.2uF" maxVoltageRating="6.3V" footprint="cap0402" manufacturerPartNumber="CL05A225MQ5NSNC" supplierPartNumbers={{ jlcpcb: ["C12530"] }} schSheetName="power" pcbX={-6.2} pcbY={-0.2} schX={5.5} schY={4.5} schOrientation="vertical" connections={{ pin1: "net.VCORE", pin2: "net.GND" }} />
     <resistor name="R3" resistance="1.2k" tolerance="1%" footprint="res0402" manufacturerPartNumber="FRC0402F1201TS" supplierPartNumbers={{ jlcpcb: ["C2909307"] }} schSheetName="power" pcbX={-12} pcbY={-2.7} schX={-3.2} schY={0.5} connections={{ pin1: "net.PMIC_IMAX", pin2: "net.GND" }} />
-    <resistor name="R4" resistance="10k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF1002TCE" supplierPartNumbers={{ jlcpcb: ["C25744"] }} schSheetName="power" pcbX={-13.5} pcbY={-4.2} schX={-1} schY={-1.2} connections={{ pin1: "net.BAT_NTC", pin2: "net.GND" }} />
+    {/* Keep the TS bias resistor north of B4, beside its escape. */}
+    <resistor name="R4" resistance="10k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF1002TCE" supplierPartNumbers={{ jlcpcb: ["C25744"] }} schSheetName="power" pcbX={-10.4} pcbY={4.4} pcbRotation={90} schX={-1} schY={-1.2} connections={{ pin1: "net.BAT_NTC", pin2: "net.GND" }} />
     {/* Overrides the PMIC's internal 900k pulldown while VCORE is present.
         Firmware drives DIO1 low only for an approved charge configuration. */}
     <resistor name="R5" resistance="100k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF1003TCE" supplierPartNumbers={{ jlcpcb: ["C25741"] }} schSheetName="power" pcbX={-9.2} pcbY={-1.4} schX={1.5} schY={-1.2} connections={{ pin1: "net.PMIC_CE", pin2: "net.VCORE" }} />
@@ -364,6 +365,8 @@ export const BluetoothPedometer = () => (
     />
     {/* Ground-plane access north of pin 9, outside its solderable pad. */}
     <via name="U4_GND_ESCAPE" pcbX={4.750064} pcbY={-6.9} connectsTo="net.GND" outerDiameter="0.2mm" holeDiameter="0.1mm" />
+    {/* Escape SDA south of pin 2, away from the adjacent VDDIO fanout. */}
+    <via name="U4_SDA_ESCAPE" pcbX={4.750064} pcbY={-9.85} connectsTo="net.I2C_SDA" outerDiameter="0.2mm" holeDiameter="0.1mm" />
     <capacitor name="C22" capacitance="100nF" maxVoltageRating="16V" footprint="cap0402" manufacturerPartNumber="CL05B104KO5NNNC" supplierPartNumbers={{ jlcpcb: ["C1525"] }} schSheetName="io" pcbX={2} pcbY={-9.8} schX={-7} schY={0.2} schOrientation="vertical" connections={{ pin1: "net.VCORE", pin2: "net.GND" }} />
     <capacitor name="C23" capacitance="100nF" maxVoltageRating="16V" footprint="cap0402" manufacturerPartNumber="CL05B104KO5NNNC" supplierPartNumbers={{ jlcpcb: ["C1525"] }} schSheetName="io" pcbX={6.3} pcbY={-11.1} schX={-5.5} schY={0.2} schOrientation="vertical" connections={{ pin1: "net.VCORE", pin2: "net.GND" }} />
     <silkscreentext text="+X" pcbX={7} pcbY={-7.8} fontSize="0.5mm" />

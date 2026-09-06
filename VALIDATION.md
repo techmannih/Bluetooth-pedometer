@@ -1,13 +1,64 @@
-# R2 validation record — 2026-09-05
+# R2 validation record — 2026-09-06
 
 **Not fabrication released.** This record supersedes the historical R1 check
 claims. A successful CLI exit is not sufficient: inspect the routed artifact
 and run the separate Gerber copper-short check.
 
-## Latest: no-via-in-pad layout follow-up
+## Latest: native build and Gerber shorts pass
 
-**Placement/routed verification is in progress; earlier passes and artifact
-hashes below do not describe the current via layout.**
+**`bun run build` exits 0, the routed artifact has zero error records, and
+both default and 100-pixels/mm all-layer Gerber checks report no shorts.**
+
+The starting routed layout had a BAT_NTC-to-GND copper short beside U2 and
+two via-clearance errors at the redundant fixed VIO escape. Corrections:
+
+- Move R4 to (-10.4, 4.4) mm, rotated 90 degrees, near U2's TS pin. Its
+  final courtyard clears both C1 and C2.
+- Remove `U2_VIO_ESCAPE`; keep VIO on VCORE and let the autorouter place its
+  layer transition without a competing fixed via.
+- Add `U4_SDA_ESCAPE` south of SDX at (4.750064, -9.85) mm to separate the
+  sensor's SDA escape from the adjacent VDDIO fanout.
+- Remove duplicate consecutive/closing polygon vertices from USB-C J1 pads
+  13–16. Every nonzero edge and copper outline is unchanged. The repeated
+  points had caused a native point-in-pad false positive for a via outside
+  J1's ground pad; no pad was shrunk or moved to silence the check.
+
+The final native netlist output is identical to the pre-change review output.
+All 59 fitted components, values and electrical connections are retained.
+No dependency patch, custom validation script, disabled DRC, relaxed rule,
+autorouter configuration change or connector relocation was introduced.
+
+Verification:
+
+- `bun run typecheck`: pass.
+- `bunx tsci check netlist index.circuit.tsx`: 0 errors, 0 warnings.
+- `bunx tsci check schematic-placement index.circuit.tsx`: exit 0; existing
+  trace-simplification suggestions remain.
+- `bunx tsci snapshot index.circuit.tsx --update`: pass; snapshots updated.
+- `bunx tsci check placement index.circuit.tsx`: 0 errors, 0 warnings.
+- `bunx tsci check routing-difficulty index.circuit.tsx`: exit 0; advisory
+  congestion remains (highest reported failure estimate 16.7%).
+- `bun run build`: exit 0, including the default all-layer Gerber shorts check.
+- `bunx tsci check shorts dist/index/circuit.json --pixels-per-mm 100`: exit 0,
+  no shorts detected.
+- `bunx tsci snapshot index.circuit.tsx --test`: exit 0, all snapshots match.
+
+The final artifact contains **59 fitted components, 161 traces, 173 vias and
+zero error records**. The PCB image and failing short-debug images were
+inspected. Evidence and failed intermediate artifacts are retained under the
+ignored `checks/build-short-fix/` directory; final logs use the `r3` suffix.
+
+- Source SHA-256: `7cb4f1dc245b43a3e5b6abefe6a5b7f2b5e08a6e53abd9c73251c4fbfbe70951`
+- USB-C import SHA-256: `125395caa73a9c7dba14c0a105b7ce739ba553e5823f9fbce8c4f02429aadd0b`
+- Circuit JSON SHA-256: `6a5521a40a895f190dad8cfb05f53ee5bb26787ea2220b7808e7e7e2198aa993`
+
+This is a local native-CLI pass, not a live-preview, hardware or fabrication
+release. RF/clock layout, vendor-approved trace/drill rules, exact battery and
+OLED selection, firmware and measured runtime remain outstanding.
+
+## Previous: no-via-in-pad layout follow-up
+
+**Historical intermediate layout; superseded by the verified build above.**
 
 The user's removal of `isViaInPadAllowed` exposed 12 pre-existing in-pad vias.
 The native baseline placement check reproduced all 12 errors. That removal,
