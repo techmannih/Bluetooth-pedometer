@@ -118,7 +118,9 @@ export const BluetoothPedometer = () => (
     <silkscreentext text="BLE PEDOMETER R4" pcbX={-4} pcbY={14.8} fontSize="0.8mm" />
     <silkscreentext text="ANTENNA - KEEP CLEAR" pcbX={18} pcbY={14.5} fontSize="0.48mm" />
 
-    {/* USB-C power sink. CC1 and CC2 each have the required independent Rd. */}
+    {/* USB-C power sink. CC1 and CC2 each have the required independent Rd.
+        D+/D- are routed to TP_DP and TP_DN for test/future expansion;
+        the CC2340R5 uses SWD (J4) for debug, so USB data is optional. */}
     <TYPE_C_31_M_12
       name="J1"
       schSheetName="power"
@@ -139,10 +141,40 @@ export const BluetoothPedometer = () => (
         EH4: "net.GND",
         CC1: "net.USB_CC1",
         CC2: "net.USB_CC2",
+        DP1: "net.USB_DP",
+        DP2: "net.USB_DP",
+        DN1: "net.USB_DN",
+        DN2: "net.USB_DN",
       }}
-      noConnect={["DP1", "DN1", "DP2", "DN2", "SBU1", "SBU2"]}
+      noConnect={["SBU1", "SBU2"]}
     />
-    <silkscreentext text="USB: CHARGE ONLY" pcbX={-19.6} pcbY={-8.3} fontSize="0.45mm" />
+    <silkscreentext text="USB: 5V CHG ONLY (D+/D- TP)" pcbX={-19.6} pcbY={-8.3} fontSize="0.42mm" />
+    <testpoint
+      name="TP_DP"
+      schSheetName="power"
+      footprintVariant="through_hole"
+      holeDiameter="0.6mm"
+      padDiameter="0.9mm"
+      pcbX={-10.5}
+      pcbY={-0.75}
+      schX={-8}
+      schY={4.5}
+      connections={{ pin1: "net.USB_DP" }}
+    />
+    <silkscreentext text="D+" pcbX={-10.5} pcbY={-1.45} fontSize="0.45mm" />
+    <testpoint
+      name="TP_DN"
+      schSheetName="power"
+      footprintVariant="through_hole"
+      holeDiameter="0.6mm"
+      padDiameter="0.9mm"
+      pcbX={-10.5}
+      pcbY={0.75}
+      schX={-8}
+      schY={3.9}
+      connections={{ pin1: "net.USB_DN" }}
+    />
+    <silkscreentext text="D-" pcbX={-10.5} pcbY={1.45} fontSize="0.45mm" />
     <resistor name="R1" resistance="5.1k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF5101TCE" supplierPartNumbers={{ jlcpcb: ["C25905"] }} schSheetName="power" pcbX={-20} pcbY={7} schX={-8} schY={5.4} connections={{ pin1: "net.USB_CC1", pin2: "net.GND" }} />
     <resistor name="R2" resistance="5.1k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF5101TCE" supplierPartNumbers={{ jlcpcb: ["C25905"] }} schSheetName="power" pcbX={-20} pcbY={-7} schX={-8} schY={3.4} connections={{ pin1: "net.USB_CC2", pin2: "net.GND" }} />
     <diode name="D1" variant="tvs" footprint="sod323" manufacturerPartNumber="PESD5V0S1BA" supplierPartNumbers={{ jlcpcb: ["C2827694"] }} schSheetName="power" pcbX={-15.5} pcbY={-2.8} pcbRotation={90} schX={-6.5} schY={3.4} connections={{ pin1: "net.GND", pin2: "net.USB_VBUS" }} />
