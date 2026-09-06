@@ -1,18 +1,28 @@
 # Fabrication and Validation Notes
 
+R4 has complete explicit routing in `routing.tsx`, with zero native routing
+errors, no disconnected nets in the geometric audit and no Gerber shorts at
+100 pixels/mm. These results do not select or approve a fabrication process.
+The source disables automatic rerouting to preserve the complete copper;
+the build still independently runs the native routing checks.
+
 ## PCB class
 
-- 48.2 mm x 34 mm, 1.0 mm FR-4, four copper layers.
+- 46.6 mm x 32 mm, 1.0 mm FR-4, four copper layers.
 - Recommended stack: L1 components/signals, L2 ground pour with only necessary
   signal escape cuts, L3 low-speed/power, L4 signals/ground fill. The design
   includes the L2 GND pour; minimize remaining L2 signal length during final
   fabrication-CAD review to make the return plane as continuous as practical.
 - 0.075 mm (3 mil) nominal fine-pitch routes in the BGA escape regions.
-- The source sets a 0.04 mm trace-to-pad minimum; inspect actual trace-to-trace
+- The source sets a 0.05 mm trace-to-pad minimum and 0.10 mm pad-to-pad and
+  via-to-pad minima; inspect actual trace-to-trace
   clearances in the final routed output and confirm that the selected process
   explicitly supports all fine-pitch rules.
-- The local 0.1 mm escape vias span all four layers, NOT blind laser
-  microvias. These are not an approved drill/lamination specification.
+- All 138 escape/stitching/routing vias use 0.20 mm drill / 0.45 mm outer copper
+  diameter; the autorouter minima match. Their nominal annular ring is
+  0.125 mm. These vias span all four layers, NOT blind laser microvias.
+  This matches the alternative dimensions in the user-provided JLCPCB email,
+  not a blanket approval of this board's fabrication or assembly process.
   This layout is not released for a standard JLCPCB 4-layer
   process. Agree the escape strategy, drill sizes/layer pairs and annular rings
   before rerouting/exporting for manufacture. Any future approved via-in-pad
@@ -21,23 +31,26 @@
 - Do not substitute ordinary open through-vias in BGA pads; solder wicking can
   create opens and package collapse problems.
 - The current manual escapes avoid solderable pads. U1's five ground vias
-  have moved outside the QFN pad field; they are not a direct EP thermal-via
-  array. Review the exposed-pad connection, RF return inductance and thermal
+  sit outside the QFN pad field; four have explicit top-copper connections
+  to the exposed pad. They are not a via-in-pad thermal array. Review the
+  exposed-pad connection, RF return inductance and thermal
   path before release. Inspect autorouted vias too, not only the manual ones.
-- Keep the dedicated U2 GND escape via adjacent to the A4 ball; it prevents the
-  charger-input escape from crossing the local ground route.
+- U2 now has 18 manual escapes to vias outside its ball array. Preserve these
+  clear paths when editing the completed routing; candidate-via placement alone
+  did not prevent the native router from creating local contacts.
 - Request controlled 50 ohm geometry for the RF feed based on the fabricator's
   actual stackup. Recalculate the feed width instead of treating the generic
   tscircuit trace width as an impedance solution.
 
 ## RF layout
 
-The C20-L2-C21 network uses TI's CC2340R5 source filter values, but the current
-generic autorouted geometry is NOT an RF reference layout. U1 ANT and X48
-pins currently face away from their external components; re-place/re-route
-this cluster before RF release. R13 is a
-zero-ohm tuning placeholder between that filter and the ceramic antenna. The
-antenna keepout blocks copper on L2/L3/L4 while permitting the top feed.
+The C20-L2-C21 network uses TI's CC2340R5 source filter values. U1 now faces
+the antenna, and the filter/feed have explicit top-layer routes with local
+ground connections. Both crystal signal networks remain on top. This custom
+geometry still needs impedance/tuning review against the selected stackup.
+R13 is a zero-ohm tuning placeholder between the filter and ceramic antenna.
+The antenna keepout excludes L2/L3/L4 copper and unrelated top routing; the
+L2 pour outline also has an explicit edge-open notch.
 
 For production:
 
@@ -108,7 +121,7 @@ together. J4 pin 1 is SWD target reference; do not inject a debugger supply.
 
 ## Pre-order checklist
 
-- [ ] tscircuit type-check passes.
+- [x] tscircuit type-check passes.
 - [ ] All 59 fitted source components still report the intended JLCPCB code;
       live stock and assembly tier have been rechecked.
 - [ ] Connectivity and placement have been reviewed against every data sheet.

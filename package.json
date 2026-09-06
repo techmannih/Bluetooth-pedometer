@@ -4,18 +4,24 @@
   "private": true,
   "description": "Ultra-low-power CC2340R5 Bluetooth pedometer built with tscircuit",
   "main": "index.circuit.tsx",
-  "keywords": ["tscircuit", "circuit", "pcb", "electronics"],
+  "keywords": [
+    "tscircuit",
+    "circuit",
+    "pcb",
+    "electronics"
+  ],
   "scripts": {
     "dev": "tsci dev",
     "start": "tsci dev",
-    "build": "tsci check netlist index.circuit.tsx && tsci build index.circuit.tsx --all-images --pcb-png --schematic-png --autorouter-timeout 15m && tsci check shorts dist/index/circuit.json",
+    "build": "tsci check netlist index.circuit.tsx && tsci build index.circuit.tsx --all-images --pcb-png --schematic-png --svgs --autorouter-timeout 15m && bun run check:artifact && tsci check shorts dist/index/circuit.json",
     "snapshot": "tsci snapshot index.circuit.tsx",
-    "snapshot:update": "tsci check netlist index.circuit.tsx && tsci build index.circuit.tsx --routing-disabled --pcb-png && tsci snapshot index.circuit.tsx --update",
-    "typecheck": "tsc --noEmit"
+    "snapshot:update": "tsci check netlist index.circuit.tsx && tsci snapshot index.circuit.tsx --update",
+    "typecheck": "tsc --noEmit",
+    "check:artifact": "bun -e 'import { runAllRoutingChecks, checkEachPcbPortConnectedToPcbTraces } from \"@tscircuit/checks\"; const c = await Bun.file(process.argv[1] ?? \"dist/index/circuit.json\").json(); const checked = [...await runAllRoutingChecks(c), ...checkEachPcbPortConnectedToPcbTraces(c)]; const seen = new Set(); const errors = [...c, ...checked].filter(x => x.type.includes(\"error\")).filter(x => { const key = x.type + \":\" + x.message; if (seen.has(key)) return false; seen.add(key); return true; }); if (errors.length) { console.error(`${errors.length} circuit errors or disconnected ports remain`); for (const x of errors) console.error(`${x.type}: ${x.message ?? \"\"}`); process.exit(1); } console.log(\"Circuit artifact: all native routing checks pass and all required ports are connected\");'"
   },
   "devDependencies": {
     "@types/react": "^19.2.18",
-    "tscircuit": "^0.0.2297",
+    "tscircuit": "^0.0.2464",
     "typescript": "^5.0.0"
   }
 }

@@ -10,7 +10,7 @@ const pinLabels = {
 
 export const PZ200V_11_05P = (props: ChipProps<typeof pinLabels>) => {
   return (
-    <connector
+    <chip
       pinLabels={pinLabels}
       supplierPartNumbers={{
   "jlcpcb": [

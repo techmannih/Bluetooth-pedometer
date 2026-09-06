@@ -1,10 +1,386 @@
-# R2 validation record — 2026-09-06
+# Pedometer validation record — 2026-09-06
 
-**Not fabrication released.** This record supersedes the historical R1 check
-claims. A successful CLI exit is not sufficient: inspect the routed artifact
-and run the separate Gerber copper-short check.
+**R4 routing is complete; fabrication is not released.** The R4 section below
+covers the current source. R3 and older sections preserve historical results.
+A successful CLI exit alone is insufficient: the build separately runs native
+routing DRC, required-port connectivity and Gerber copper-short detection.
 
-## Latest: native build and Gerber shorts pass
+## R4 follow-up — schematic readability
+
+`ANT` is now a horizontal annotation above the antenna symbol. The feed uses
+physical `pin1` instead of the `ANT` alias; its RF_ANT connection and pin 2's
+no-connect status are preserved. The complete footprint and CAD remain intact.
+Typecheck, the full package build and independent physical continuity pass:
+211 connected pins / 46 nets, no opens or shorts. All PCB pads, holes, vias,
+traces, pours and the outline compare unchanged against the validated R4 ZIP.
+The multi-sheet schematic snapshot contains the updated annotation at 0°;
+the CLI's `dist/index/schematic.svg` exports the first (power) sheet only.
+The full schematic is in `__snapshots__/index.circuit-schematic.snap.svg`.
+
+C17 is aligned directly below R12 at schematic (-6, -4.5), producing the
+vertical VCORE → R12 → MCU_RSTN → C17 → GND drawing. Only C17's schematic
+coordinates changed. Its value, connections, PCB placement and copper paths
+are preserved. Typecheck, snapshot generation and the full package build
+pass after this adjustment; the MCU-sheet reset-network preview was inspected.
+Evidence is in `checks/r4-label-vias/reset-*`.
+
+Via sizing remains 0.20 mm drill / 0.45 mm outer copper. The requested
+0.30 mm value is pending clarification of drill versus outer copper diameter.
+The earlier R4 ZIP predates this annotation-only follow-up. Its fresh-install
+and high-resolution short-check evidence below applies to that archived source;
+current annotation evidence is in `checks/r4-label-vias/label-*` locally.
+
+## R4 — complete explicit routing and distributed placement
+
+The charger moves to (-6, 8) mm, the MCU/RF group moves 2 mm upward, and U4 moves
+to (0, -4) mm. Associated passives and J5 are redistributed into the upper and
+central space. The 46.6 × 32 mm outline, 59 fitted parts, 33 supplier codes and
+all 211 connected named-pin/net mappings (including permanently paired switch
+legs) are preserved. The prior 207-pin comparison omitted those four paired
+legs; no new electrical function is implied by the count change.
+
+`routing.tsx` contains all 303 native layer paths and 138 unique through-vias.
+The north-edge MCU fanout is staggered outside the pad row, the oscillator-side
+supply via no longer touches Y1, and both VCORE copper islands are joined.
+USB paths use J1's placement anchor rather than its asymmetric footprint centre.
+The 32 kHz branches were shortened while remaining entirely on top copper.
+
+This is **complete manual routing**, not a passing automatic-router run.
+`routingDisabled` preserves the explicitly authored copper. The build's
+`check:artifact` independently runs the entire bundled `runAllRoutingChecks`
+set plus `checkEachPcbPortConnectedToPcbTraces`, even when automatic routing is
+off. It does not remove error records, alter the checks or lower the board's
+via/clearance rules. No installed package, library method or lockfile was
+changed by R4.
+
+The installed core also skips its built-in routing-DRC phase when
+`routingDisabled` is set. The package build explicitly restores those checks;
+a direct CLI/cloud preview alone is not equivalent to `bun run build`.
+
+| Check | Current result |
+| --- | --- |
+| `bun run typecheck` | PASS |
+| Native netlist | PASS; 0 errors / 0 warnings |
+| `bunx tsci check placement index.circuit.tsx` | PASS; 0 placement errors / 0 warnings |
+| `bun run build` | PASS; 0 recorded errors, all bundled routing checks pass, all required ports connected, no Gerber shorts |
+| All-layer Gerber shorts at 100 pixels/mm | PASS; no shorts detected |
+| Independent geometric copper continuity | PASS; 211 fitted-part pins, 46 nets, 0 open nets, 0 shorted net groups |
+| Fresh `bun install --frozen-lockfile`, typecheck and build | PASS with no copied dependencies or route cache |
+| Fresh-build independent continuity audit | PASS; same 211 pins / 46 nets and no opens or shorts |
+| PCB and schematic snapshots | Updated and comparison passes |
+| Build gate negative control | Rejects an incomplete manual-route artifact with exit 1 and 162 disconnected-port errors |
+| BOM | 59/59 references, quantities, manufacturer numbers and supplier codes match the 33 BOM rows |
+| Vias | 138/138 are 0.20 mm drill / 0.45 mm outer copper, spanning top/inner1/inner2/bottom; no via-in-pad |
+| Minimum via drill-edge spacing | 0.262088 mm, above the retained 0.20 mm minimum |
+| Ground pour inside antenna exclusion | 0 mm² |
+
+Measured on the rebuilt artifact:
+
+| Signal path | Copper length | Layers / signal vias |
+| --- | --- | --- |
+| 48 MHz P | 3.650 mm, below 6 mm | top / 0 |
+| 48 MHz N | 5.336 mm, below 6 mm | top / 0 |
+| 32 kHz P including load leg | 2.834 + 1.962 = 4.796 mm, below 5 mm | top / 0 |
+| 32 kHz N including load leg | 2.679 + 1.962 = 4.641 mm, below 5 mm | top / 0 |
+| RF source, filter input, filter output, match, feed | 2.846 / 0.770 / 0.770 / 1.390 / 1.512 mm | all top / 0 |
+
+The native port checker alone did not catch separated VCORE islands in a
+rejected automatic route: every pin already touched some copper. The optional
+`diagnostics/check-copper-connectivity.py` independently checks actual
+same-layer copper intersections and plated layer connections, including pours.
+It rejected that candidate and detected the same shorts as the Gerber check.
+A previously published connected artifact passed as a positive control.
+Its 1 nm numerical joining tolerance is far below the configured clearances.
+
+The model uses a small native `Port`/`Via` ref callback to expose the inner
+terminals of each through-via. The installed Via constructor runs before it
+has a four-layer board parent and otherwise creates only top/bottom terminals.
+The callback adds terminals to the component; it does not replace a library
+method or change any via copper/drill geometry.
+
+Non-routing advisories remain: 138 native via-component courtyard notices,
+37 differences between requested standard passive footprints and supplier
+patterns, imported pin/reference metadata notices and existing schematic
+renderer advisories. These are distinct from the zero placement/routing-check
+errors. Vendor DFM, RF impedance/tuning, decoupling/DC-DC return quality,
+crystal characterization and assembled step-count/runtime testing remain in
+`DESIGN_REVIEW.md`; no hardware-performance superiority is claimed.
+
+Evidence for this revision is under `checks/r4-layout/final-*` locally and in
+the R4 ZIP. `README.md` describes the current source;
+`diagnostics/R3_ROUTER_ISSUES.md` preserves the previous router handoff.
+The earlier R3 ZIP and routing failures below are historical.
+
+## Historical R3 circuit review — routing unresolved
+
+The [R3 router issue notes](diagnostics/R3_ROUTER_ISSUES.md) describe the
+standalone topology/cache reproducers and a shareable evidence package. A fresh
+copy installed with `bun install --frozen-lockfile` and no copied route cache
+passed typecheck, then reproduced the same Pipeline7 failure and 163 error
+records. Native build exited 0; `check:artifact` exited 1. The two-node topology
+fixture reproduces on 0.0.866 and 0.0.885. The two-resistor cache fixture verifies
+both solver-version and effort collisions, including a fresh Pipeline4 control.
+No circuit geometry, BOM or dependencies changed during this handoff follow-up.
+
+These changes are a reviewed prototype revision,
+**not a completed routing repair or manufacturing release**.
+The preceding R2 results below do not certify this changed layout.
+
+Verified on the final manual-fanout source:
+
+| Check | Result |
+| --- | --- |
+| TypeScript | PASS |
+| Native netlist | PASS; 0 netlist errors / warnings |
+| Native schematic placement | Exit 0; existing cross-sheet renderer and trace-simplification advisories remain |
+| Native PCB placement | PASS; 0 errors, 2 existing connector-orientation warnings |
+| Placement-only build | 59 fitted parts, 40 explicit traces, 30 explicit vias, 0 error records |
+| Manual copper, all-layer Gerber shorts at 100 pixels/mm | PASS; this checks the explicit copper only |
+| BOM and logical-net comparison | 59 parts / 33 supplier codes match; all 207 connected named-component pin/net mappings preserved |
+| Via geometry in the placement artifact | All 30 are 0.20 mm drill / 0.45 mm copper, through all four layers; minimum drill-edge gap 0.400 mm |
+| Ground-pour intersection with antenna exclusion | 0 mm² |
+| Full routed release gate | **FAIL / unresolved** |
+
+Both crystals and the RF feed remain explicit top-layer copper with zero signal
+vias in this placement artifact. HF trace lengths are 3.051 and 5.331 mm
+against a 6 mm limit. Each LF branch is 2.689 + 1.962 = 4.651 mm against 5 mm.
+C10's direct VDDR bypass copper is 0.989 mm. These measurements must be repeated
+on a successfully routed result; they do not certify an incomplete board.
+
+The BQ25150 VINLS bypass C5 changes to 4.7 uF, and only the PMIC status pulls
+R6/R7 change to 100 kOhm. R9 retains the gauge data sheet's recommended 10 kOhm.
+No imported footprint was reduced or changed by this circuit review.
+
+The final main source retains the default Pipeline7 router. The final
+`bun run build` fails with 163 records: one topology-merging failure and 162
+unconnected ports. `check:artifact` returns failure, so the build does not reach
+the subsequent Gerber step. Current `dist/index/circuit.json` is this failed
+partial artifact; the separately archived placement preview is not a routed
+release. Its inspected manual copper and logical records are identical.
+
+### Native routing attempts
+
+- Pipeline7 fails during topology merging with an unresolved overlap between a
+  manual fanout mesh node and a U2 pad node. Axis-aligned initial legs, pad-edge
+  clipping and via-terminal variations did not resolve this failure.
+- Pipeline4 reached global DRC improvement but timed out at 15 minutes. It did
+  not produce a completed result. Pipeline5 also timed out at five minutes.
+- Pipeline3 failed with an internal empty-region assignment error.
+- Pipeline9's original geometry failed with an immutable fixed-route conflict;
+  axis-aligned legs instead reached high-density routing but failed its regional
+  fallback validator. Further explicit VCORE-join trials at 5x effort also
+  timed out at five minutes. None is a passing result.
+- Removing the fixed U2 paths while retaining 18 explicit escape vias let
+  Pipeline7 finish, but produced **36 error records** (13 trace, 12 pad/via,
+  7 via/trace and 4 via-spacing errors). That candidate was rejected.
+- A later 1x Pipeline9 trial with a bottom-layer VCORE join completed with
+  11 error records and 3 high-resolution short regions. It also rerouted fixed
+  crystal copper through vias, so it was rejected. Explicit zero-via signal
+  limits were added to the source to make these requirements checkable.
+- A nominal Pipeline4 comparison reused that Pipeline9 phase cache. The core
+  cache key includes the SRJ and core version, but omits solver version/effort.
+  That run is not independent evidence; the specific cached phase result was
+  archived before a fresh run with solver-debug capture. The fresh Pipeline4
+  run completed with **84 error records**, including one disconnected NTC port,
+  and was also rejected. No routed candidate passed the release gate.
+- The official capacity-autorouter 0.0.885 package was tested in an isolated
+  diagnostic against the Pipeline7 failure and reproduced it. Installed
+  dependencies were not changed or patched.
+
+The build's `check:artifact` command rejects stored error records and separately
+runs the bundled native `checkEachPcbPortConnectedToPcbTraces` check. It correctly
+rejects this zero-error placement JSON for 162 unconnected ports, and rejects the
+starting failed route. A downloaded previously published, connected artifact
+passes the gate. That positive fixture validates the gate, not the current PCB.
+The all-layer copper-short check remains a separate subsequent build step.
+
+Evidence is in ignored `checks/comparison-2026-09-06/`: `final-*.log`,
+`final-placement.circuit.json`, PCB/schematic previews and rejected routing
+candidates. Root routed snapshots were not replaced with an unrouted preview.
+Do not use these placement files to order boards.
+
+- Manual-fanout source SHA-256: `9aa679fd5b28bbcbf951ab1b2097e2ecbce43f48a6162a5dbd1dd779cae47bf4`
+- Placement circuit SHA-256: `bf9ee27df665eda3977f608ce3e0ab0aadd87fa7ce9eafbe2fd6cd68ac3b25f5`
+- BOM SHA-256: `f2540167f86540828d6b57586775e3afb109cdd1bd0af0e129c8912a985091df`
+
+## Previous: requested 0.20 / 0.45 mm vias
+
+All 16 explicit vias now use a 0.20 mm drill and 0.45 mm outer copper diameter.
+Board-level `minViaHoleDiameter` and `minViaPadDiameter` match, with a nominal
+0.125 mm annular ring. These dimensions were requested from the alternative
+in the user-provided JLCPCB email; that email does not approve this board's
+remaining fine-pitch clearances or guarantee an assembly tier/price.
+
+Only the 18 via-size settings changed in the circuit source. Via positions,
+nets, imported components, footprints and crystal routes were preserved.
+The before/after placement artifacts have identical source component, port,
+trace and net records, solder pads, connector holes, keepout and six explicit
+clock paths. The 59 fitted parts and BOM remain unchanged.
+
+Checks use the updated, unpatched tscircuit 0.0.2464 / CLI 0.1.2021 toolchain:
+
+- Typecheck: pass.
+- Netlist: 0 errors, 0 netlist warnings; existing cross-sheet renderer warnings
+  remain separate from the netlist result.
+- Schematic placement: exit 0 with existing simplification/renderer advisories.
+- Routing-disabled build and native placement snapshot: pass; 16/16 exported
+  vias have the requested dimensions and zero circuit error records. The
+  placement-only PCB PNG was inspected using the tscircuit skill workflow.
+- PCB placement: 0 errors, 2 existing J2/J4 connector-orientation warnings.
+  These warnings were not hidden or corrected by the via-size change.
+- Routing difficulty: exit 0; congestion remains around U2 (highest reported
+  region estimate 17.7%). This is not a routed DRC pass.
+- Full `bun run build`: **FAIL (exit 1)**. The router completed, but the final
+  artifact contains 33 circuit error records: 18 trace, 1 pad/trace-clearance,
+  5 pad/pad-clearance, 4 via-clearance and 5 placement errors. The subsequent
+  Gerber check detected **25 short regions** across top, inner1, inner2 and
+  bottom layers, predominantly around U2. A solver's own `errors=0` report is
+  not a clean final routed-board result.
+- The completed artifact contains 59 fitted parts, 161 traces and 157 vias.
+  **All 157 vias, including the 141 autorouted vias, are 0.20 / 0.45 mm.**
+  The requested size change is verified; routing/clearance corrections are
+  still required before describing this revision as review-complete.
+
+Evidence: ignored `checks/via-020-045/`. This change does not release the
+board for fabrication. No dependency patch, DRC bypass or clearance change
+was introduced.
+
+- Source SHA-256: `9ba41448027856aa4037d4fa1c4e97ad22eec8b900d96aded3668cd1abf9dd3b`
+- Failed routed circuit SHA-256: `79406750355b10fc9f68fd8bff4d4c8ae1898d1fda33828b6c92cc4d8426c22d`
+- BOM SHA-256 (unchanged): `353113b9b7550757aefdc2cef108f5d0868130ce6b660a1370527ede8bfe6758`
+
+## Previous: complete-import audit
+
+All 15 component imports were compared with fresh exact-footprint output from
+the installed, unmodified CLI. Thirteen match that output (ignoring the final
+newline); Y1's necessary unique ground aliases/symbol stroke widths and J1's
+polygon normalization/user CAD alignment remain documented exceptions. See
+`JLCPCB_PARTS.md` for the component-by-component audit.
+
+J2's complete imported footprint is restored, including its body silkscreen,
+pin-1 marker, reference text, courtyard and original hole coordinates. The
+whole connector moved to (-18, -12.8) mm; its courtyard's bottom is
+-15.428837 mm against the board's -16 mm edge. Battery pin labels moved below
+the body, and USB charge-only text was separated from the restored J2 label.
+The tscircuit skill's placement/image workflow was used to verify this change;
+no courtyard or body geometry was removed to silence a check.
+
+Verification after the final edits, in native check order:
+
+- `bun run typecheck`: pass.
+- `bunx tsci check netlist index.circuit.tsx`: 0 netlist errors/warnings.
+- `bunx tsci check schematic-placement index.circuit.tsx`: exit 0; existing
+  trace-simplification advisories and cross-sheet renderer overlap warnings
+  remain. This is not a warning-free schematic claim.
+- `bunx tsci build index.circuit.tsx --routing-disabled --pcb-png --schematic-png`:
+  pass, with zero circuit error records. Existing source-metadata and native
+  passive/supplier-footprint mismatch warnings remain.
+- `bunx tsci snapshot dist/index/circuit.json --update`: pass; placement-only
+  snapshots generated under ignored `dist/index/__snapshots__/`. PCB and
+  power-sheet PNGs were inspected. Root routed snapshots were not replaced
+  with this unrouted preview.
+- `bunx tsci check placement index.circuit.tsx`: 0 errors, 0 warnings.
+
+Artifact comparison against the start of this import audit confirms all
+59 fitted component records (values, MPNs and supplier codes) and 228 physical
+pin-to-net mappings are unchanged. Only J2 has changed pad/hole geometry,
+as expected from restoring/moving its complete footprint. The six explicit
+clock traces are unchanged; Y1 pins 2 and 4 both remain GND.
+
+**This is an import/placement verification, not a full routed-build pass.**
+The current `dist/index/circuit.json` is unrouted except for the six explicit
+clock traces and contains 16 manually placed vias. Full `bun run build` and
+Gerber shorts were not rerun for this import-only change; the failed routing
+status in the next section remains unresolved. Do not order this preview.
+Evidence is under ignored `checks/import-completeness/`; no dependencies,
+package scripts, DRC settings or native passive footprints were changed.
+
+- Source SHA-256: `8df42bfb774c2005f5dc843ec5761874fa71f1de299fad3a32080b296e29493a`
+- Unrouted circuit SHA-256: `c9eb7a8e4407dc9e8f3e3d1af48addf193e48d047b010cca76918e54868ec260`
+- BOM SHA-256 (unchanged): `353113b9b7550757aefdc2cef108f5d0868130ce6b660a1370527ede8bfe6758`
+
+## In progress: reviewer layout / via / schematic corrections
+
+The source is being revised for the crystal, via-size, schematic and board-size
+review. Do not apply the previous revision's pass results or hashes below to
+this working source. Intermediate evidence is under ignored
+`checks/reviewer-fixes/`.
+
+- Both crystals now sit beside their respective MCU oscillator pins. Six
+  native, explicit top-layer paths include the 32 kHz load-capacitor branches.
+  In the completed `r4` routed artifact, all four oscillator nets have zero
+  signal vias: X48_P = 2.523 mm, X48_N = 5.161 mm, X32_P/N = 4.651 mm including
+  their respective load-capacitor branches. Native length limits are 6/5 mm;
+  the installed core does not enforce `maxViaCount`, so actual routes were
+  inspected instead of relying on that property.
+- Y1 uses the complete imported four-pin custom symbol with the imported copper and
+  physical signal/ground pin mapping retained. Pull-ups are vertical with
+  their supply pin above; VCORE is explicitly a power net. Battery labels
+  match physical pin order, USB is labelled charge-only, and SWD uses VREF.
+- Board size is 46.6 x 32 mm (about 9% less area). Mounting holes and connector
+  placement were checked after the shrink. Updated placement has zero errors
+  and warnings; native typecheck and netlist also pass. Schematic-placement
+  exits 0 with existing cross-sheet overlap and simplification advisories.
+- All 156 vias in the completed `r4` output are 0.3 mm drill / 0.5 mm copper.
+  All 59 fitted parts, supplier codes, passive values and physical pin-to-net
+  mappings are unchanged. However, that full route has **44 error records and
+  31 detected Gerber short regions**. It is a failed build despite CLI exit 0.
+- MCU power-component placement has since been improved. The native
+  `beta_pipeline9` trial failed with a duplicate PCB-terminal error and was
+  withdrawn. A subsequent breakout trial failed port resolution and was also
+  withdrawn. The source uses the default autorouter again; no reroute is
+  currently in progress. There is no dependency patch, DRC bypass or relaxed
+  clearance rule. A clean final routed result is still required;
+  source-level placement success is not routing success.
+
+## Previous: antenna keepout / ground-pour overlap fixed
+
+The reviewer's finding was reproduced: the L2 (`inner1`) GND pour covered
+the entire **30.25 mm²** antenna keepout despite the prior native checks
+passing. The installed pour converter does not subtract `pcb_keepout`
+objects; therefore a shorts pass alone was not proof of keepout clearance.
+
+`GND_PLANE_L2` now uses the native `copperpour.outline` property to create a
+notch from the antenna keepout to the right board edge. Shared board/keepout
+dimensions preserve the rounded perimeter and prevent the two exclusions
+drifting apart. The existing 0.25 mm pour-edge margin also clears the notch:
+its copper boundary is x = 18.00 mm, y = 6.50/12.50 mm. The original keepout
+and its L2/L3/L4 layer restrictions remain intact; the top RF feed is retained.
+
+Verification on the final source:
+
+- Typecheck, netlist, schematic-placement, snapshot update, PCB placement,
+  routing-difficulty and `bun run build`: exit 0, in the skill's native order.
+  Netlist and placement have zero errors/warnings. Existing schematic,
+  supplier-footprint and routing-congestion advisories remain; the highest
+  reported routing failure estimate is still 16.7%.
+- Default and 100-pixels/mm all-layer Gerber shorts: no shorts detected.
+- Native snapshot test: all snapshots match.
+- Actual generated pour/keepout polygon intersection: **0 mm²**, down from
+  30.25 mm²; the keepout expanded by 0.249 mm also has zero intersection.
+- Native Gerber export: successful. Inspection of `In1_Cu.gbr`, `In2_Cu.gbr`
+  and `B_Cu.gbr` found zero positive-region intersection with the keepout and
+  no trace/flash bounds intersecting it. Layer-specific PCB images were also
+  inspected. This targeted geometry inspection is additional evidence, not
+  an independent fabricator DRC or a replacement package validation script.
+
+The artifact retains **59 fitted components, 161 traces, 173 vias and zero
+error records**. Board, component, pad, plated-hole, keepout, trace, via and
+logical-connectivity records are unchanged; the readable netlist is identical
+to the previous revision. Only the ground pour and its PCB snapshot change.
+No dependency patch, custom package checker, DRC bypass or relaxed rule was
+introduced. Evidence is under ignored `checks/keepout-pour-fix/`, including
+before/after geometry, layer images, native command logs and exported Gerbers.
+
+- Source SHA-256: `f63bc06df91f82eeb6c31ec957dc316b48e0ac346e0ad6450b72289455562a82`
+- Circuit JSON SHA-256: `9ec548b30c375bd44eb75653c0c5a33e6b5cd462a22a5b9f67d010eb341020f1`
+
+**Local verification only.** No hosted project was updated or fabrication
+release granted. Antenna-vendor geometry, RF/clock layout, stackup and tuning,
+vendor-approved trace/drill rules, battery/OLED selection, firmware and
+measured runtime remain outstanding.
+
+## Previous: native build and Gerber shorts pass
 
 **`bun run build` exits 0, the routed artifact has zero error records, and
 both default and 100-pixels/mm all-layer Gerber checks report no shorts.**

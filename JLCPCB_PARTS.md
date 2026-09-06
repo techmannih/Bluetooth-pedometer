@@ -11,6 +11,61 @@ claimed identical to the supplier package; compare pad geometry before release.
 Catalog availability was checked on 2026-09-05. Stock and assembly tier can
 change, so recheck all codes in the JLCPCB order flow before purchase.
 
+## Complete-import audit — 2026-09-06
+
+All 15 component files were compared against fresh output from the installed,
+unmodified CLI (`@tscircuit/cli` 0.1.2021), using
+`tsci import --jlcpcb --use-exact-footprint <LCSC-code>` in an isolated directory.
+This checks completeness against that importer, not independent datasheet
+accuracy, current assembly stock, or 3D-model alignment.
+
+| Imports | Result |
+| --- | --- |
+| U1 CC2340R5; U2 BQ25150; U3 BQ27427; U4 BMA400 | Already match complete imports, including all supplied pin labels/attributes, footprint and CAD metadata. These imports do not supply custom symbols. |
+| U5 TPS22918; SW1/SW2 SKRPACE010; Y2 ABS07 | Already match the importer's native `switch`, `pushbutton`, and `crystal` elements respectively. No imported custom symbol was removed. |
+| FB1 BLM18 | Already matches the complete import, including its custom symbol. |
+| AE1 antenna | Complete footprint, CAD and symbol strokes retained; horizontal label correction recorded below. |
+| J2 B3B-PH | Restored the complete footprint: exact hole coordinates, body silkscreen, pin-1 marker, reference label and courtyard, plus the original pin labels and `chip` wrapper. |
+| J1 USB-C; J3/J4 PZ200 headers; J5 JST-SH | Restored the original `chip` wrappers and footprint declarations; no replacement symbol invented. J1 exceptions are recorded below. |
+| Y1 ABM11W | Complete four-pin custom symbol, ground requirements, footprint and CAD retained; alias correction recorded below. |
+
+Nine files match fresh imports exactly apart from the final newline.
+Six retain deliberate, documented local corrections:
+
+- Y1: use unique `GND1`/`2` and `GND2`/`4` port aliases. The importer's shared
+  `GND` alias caused a missing-pin error in the installed core. Both ground
+  pins still connect to GND and retain `requiresGround`. The user's explicit
+  0.02 mm symbol stroke widths are also retained.
+- J1: remove duplicate consecutive/closing polygon vertices from pads 13–16
+  without changing their copper outlines. Preserve the user's CAD-origin
+  adjustment (Y = -2.3500289000000517 instead of -2.7500289000000517); this is
+  not a claim that the model alignment has been mechanically verified.
+- J2 B3B-PH and J3/J4 PZ200V: add `insertionDirection="from_above"` to the
+  complete imported footprint. These are vertical mating connectors; this
+  corrects the in-plane orientation check without changing copper, holes,
+  body, courtyard, symbol or CAD data. See the
+  [JST PH series drawing](https://www.jst-mfg.com/product/pdf/eng/ePH.pdf) and
+  [XFCN PZ200V-11 family drawing](https://datasheet.lcsc.com/lcsc/2409302300_XFCN-PZ200V-11-04P_C541858.pdf).
+- AE1: move `ANT` from the auto-rendered vertical pin alias to an explicit
+  horizontal `schematictext` above the complete imported antenna symbol.
+  The feed is addressed as physical `pin1` in the symbol and board connection;
+  pin 2 remains unconnected. Copper, routing, symbol strokes and CAD are unchanged.
+
+The board places J2 at (-18, -12.8) mm so its restored body/courtyard stays
+inside the outline. Its physical wiring remains pin 1 BAT+, pin 2 NTC,
+pin 3 GND; the board silkscreen carries these meanings. No imported
+footprint was trimmed to make placement pass. Standard native passives and
+their locked supplier codes are unchanged.
+
+For future imports, retain the complete generated element, symbol (if
+provided), pin data, footprint and CAD metadata. A `chip` wrapper is not
+itself evidence of an incomplete import: it can contain a custom `symbol`,
+or use the default pin-labelled IC/connector representation if the importer
+supplies no custom one. Record necessary corrections instead of silently
+dropping imported data.
+
+## Locked parts
+
 | LCSC code | Manufacturer part number | Used for |
 | --- | --- | --- |
 | C45190532 | CC2340R53N0RKPR | U1 BLE MCU |

@@ -1,0 +1,52 @@
+{
+  "layerCount": 4,
+  "nodeGroups": [
+    {
+      "groupId": "global",
+      "nodes": [
+        {
+          "capacityMeshNodeId": "cmn_842",
+          "center": {
+            "x": -11.525075000000001,
+            "y": 2.2249235
+          },
+          "width": 0.45824161931957974,
+          "height": 0.12459125120067105,
+          "layer": "top",
+          "availableZ": [
+            0
+          ],
+          "_containsObstacle": true,
+          "_containsTarget": true,
+          "_connectedTo": [
+            "pcb_port_26",
+            "pcb_port_90"
+          ]
+        }
+      ],
+      "isComponent": false
+    },
+    {
+      "groupId": "component-1",
+      "nodes": [
+        {
+          "capacityMeshNodeId": "obstacle-pcb_component_5-pcb_component_5:-11.3001:2.199898:0.1999996:0.1999996:top-0--11.3001-2.199898",
+          "_containsObstacle": true,
+          "_containsTarget": true,
+          "_targetConnectionName": "source_net_7",
+          "center": {
+            "x": -11.3001,
+            "y": 2.199898
+          },
+          "width": 0.1999996,
+          "height": 0.1999996,
+          "layer": "z0",
+          "availableZ": [
+            0
+          ]
+        }
+      ],
+      "isComponent": true
+    }
+  ]
+}

@@ -1,4 +1,3 @@
-import "tscircuit"
 import type { ChipProps } from "@tscircuit/props"
 
 const pinLabels = {
@@ -9,7 +8,7 @@ const pinLabels = {
 
 export const B3B_PH_K_S_LF__SN_ = (props: ChipProps<typeof pinLabels>) => {
   return (
-    <connector
+    <chip
       pinLabels={pinLabels}
       supplierPartNumbers={{
   "jlcpcb": [
@@ -17,13 +16,15 @@ export const B3B_PH_K_S_LF__SN_ = (props: ChipProps<typeof pinLabels>) => {
   ]
 }}
       manufacturerPartNumber="B3B-PH-K-S(LF)(SN)"
-      footprint={
-        <footprint insertionDirection="from_above">
-          <platedhole portHints={["pin1"]} pcbX="2mm" outerDiameter="1.6mm" holeDiameter="1mm" shape="circle" />
-          <platedhole portHints={["pin2"]} pcbX="0mm" outerDiameter="1.6mm" holeDiameter="1mm" shape="circle" />
-          <platedhole portHints={["pin3"]} pcbX="-2mm" outerDiameter="1.6mm" holeDiameter="1mm" shape="circle" />
-        </footprint>
-      }
+      footprint={<footprint insertionDirection="from_above">
+        <platedhole  portHints={["pin2"]} pcbX="0mm" pcbY="-0.550037mm" outerDiameter="1.5999968mm" holeDiameter="0.999998mm" shape="circle" />
+<platedhole  portHints={["pin1"]} pcbX="1.999996mm" pcbY="-0.550037mm" outerDiameter="1.5999968mm" holeDiameter="0.999998mm" shape="circle" />
+<platedhole  portHints={["pin3"]} pcbX="-1.999996mm" pcbY="-0.550037mm" outerDiameter="1.5999968mm" holeDiameter="0.999998mm" shape="circle" />
+<silkscreencircle pcbX="3.285998mm" pcbY="-1.566037mm" radius="0.359156mm" />
+<silkscreenrect pcbX="0mm" pcbY="0mm" width="7.999984mm" height="4.500118mm" strokeWidth="0.254mm" />
+<silkscreentext text="{NAME}" pcbX="0.0254mm" pcbY="3.396363mm" anchorAlignment="center" fontSize="1mm" />
+<courtyardoutline outline={[{"x":-4.364799999999832,"y":2.646362999999951},{"x":4.41560000000004,"y":2.646362999999951},{"x":4.41560000000004,"y":-2.6288370000000896},{"x":-4.364799999999832,"y":-2.6288370000000896},{"x":-4.364799999999832,"y":2.646362999999951}]} />
+      </footprint>}
       cadModel={{
         objUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C131339.obj?uuid=dad20adf37e74a59b293d1ce4ac84f72",
         stepUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C131339.step?uuid=dad20adf37e74a59b293d1ce4ac84f72",

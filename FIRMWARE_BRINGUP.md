@@ -61,8 +61,9 @@ TRACKING --explicit power-off / storage command--> SHIP/OFF
 - Cache step totals in RAM and checkpoint nonvolatile state sparingly to limit
   flash energy and wear.
 - Allow the BQ27427 to enter its low-current state between gauge reads.
-- Check open-drain status/interrupt levels before sleeping: each asserted
-  10 kOhm pull-up consumes approximately 300 uA at 3 V. Acknowledge clearable
+- Check open-drain status/interrupt levels before sleeping: R6 and R7 are
+  now 100 kOhm, so each asserted status pull consumes approximately 30 uA at
+  3 V. I2C R10/R11 remain 10 kOhm (300 uA when low). Acknowledge clearable
   interrupt sources and budget for any intentionally sustained low status;
   do not assume the MCU sleeping makes these resistor currents disappear.
 - Drive DIO14 low between PMIC transactions when running on battery; /LP is
@@ -124,6 +125,13 @@ brownout, MCU reset, watchdog reset and recovery from a flat cell. The /CE
 pull-up depends on VCORE: it is not an independent battery safety interlock.
 Check LDO startup/stability with the actual OLED module's input capacitor and
 worst-case pixel load, including the 1.8-to-3.0 V transition.
+
+C5 is now a 4.7 uF VINLS bypass, matching/exceeding the nominal downstream
+on-board capacitance. Account for DC bias and the external display before
+approving the rail. R9 remains the recommended 10 kOhm gauge pull-up. Scope /INT and /PG with
+the new 100 kOhm pulls at
+both 1.8 V and 3.0 V; verify high-level leakage margin and that the interrupt
+edge settles within the shortest configured pulse and the MCU input timing.
 
 References: [TI BQ25150, pin functions and low-power mode](https://www.ti.com/lit/ds/symlink/bq25150.pdf),
 [Bosch BMA400, interrupt features and step counter](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bma400-ds000.pdf).

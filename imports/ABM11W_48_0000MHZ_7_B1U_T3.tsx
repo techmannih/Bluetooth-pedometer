@@ -4,12 +4,12 @@ const pinLabels = {
   pin1: ["pin1"],
   pin2: ["GND1"],
   pin3: ["pin3"],
-  pin4: ["GND2"]
+  pin4: ["GND2"],
 } as const
 
 const pinAttributes = {
-  pin2: {requiresGround: true},
-  pin4: {requiresGround: true}
+  pin2: { requiresGround: true },
+  pin4: { requiresGround: true },
 } as const
 
 export const ABM11W_48_0000MHZ_7_B1U_T3 = (props: ChipProps<typeof pinLabels>) => {
@@ -17,8 +17,21 @@ export const ABM11W_48_0000MHZ_7_B1U_T3 = (props: ChipProps<typeof pinLabels>) =
     <chip
       pinLabels={pinLabels}
       pinAttributes={pinAttributes}
-      schWidth={1.6}
-      schHeight={1}
+      symbol={
+        <symbol>
+          <port name="pin1" pinNumber={1} aliases={["1"]} direction="left" schX={-0.6} schY={-0.2} schStemLength={0.2} />
+          <port name="pin3" pinNumber={3} aliases={["3"]} direction="right" schX={0.6} schY={0.2} schStemLength={0.2} />
+          <port name="pin4" pinNumber={4} aliases={["GND2", "4"]} direction="left" schX={-0.6} schY={0.2} schStemLength={0.2} />
+          <port name="pin2" pinNumber={2} aliases={["GND1", "2"]} direction="right" schX={0.6} schY={-0.2} schStemLength={0.2} />
+          <schematicrect schX={0} schY={0} width={0.8} height={0.8} strokeWidth={0.02} color="#880000" />
+          <schematiccircle center={{ x: -0.3, y: -0.3 }} radius={0.03} strokeWidth={0.02} color="#880000" isFilled fillColor="#880000" />
+          <schematicpath points={[{ x: -0.1, y: -0.14 }, { x: -0.1, y: 0.14 }]} strokeColor="#881100" />
+          <schematicpath points={[{ x: 0.1, y: -0.14 }, { x: 0.1, y: 0.14 }]} strokeColor="#881100" />
+          <schematicpath points={[{ x: -0.4, y: -0.2 }, { x: -0.2, y: -0.2 }, { x: -0.2, y: 0 }, { x: -0.1, y: 0 }]} strokeColor="#880000" />
+          <schematicpath points={[{ x: 0.4, y: 0.2 }, { x: 0.2, y: 0.2 }, { x: 0.2, y: 0 }, { x: 0.1, y: 0 }]} strokeColor="#880000" />
+          <schematicrect schX={0} schY={0} width={0.08} height={0.28} strokeWidth={0.02} color="#880000" />
+        </symbol>
+      }
       supplierPartNumbers={{
   "jlcpcb": [
     "C1985532"

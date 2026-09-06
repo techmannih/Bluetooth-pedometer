@@ -1,7 +1,7 @@
 import type { ChipProps } from "@tscircuit/props"
 
 const pinLabels = {
-  pin1: ["ANT"],
+  pin1: ["pin1"],
   pin2: ["pin2"]
 } as const
 
@@ -11,10 +11,13 @@ export const A_2450AT18A100E = (props: ChipProps<typeof pinLabels>) => {
       pinLabels={pinLabels}
       symbol={
         <symbol>
+          {/* Keep the antenna label horizontal above the symbol. A named
+              downward-facing pin renders its label vertically on the stem. */}
+          <schematictext text="ANT" schX={0} schY={0.65} schRotation={0} anchor="center" fontSize={0.18} color="#006464" />
           <schematicpath points={[{"x":0,"y":0},{"x":-0.2,"y":0.2}]} strokeColor="#8D2323" />
           <schematicpath points={[{"x":0.2,"y":0.2},{"x":0,"y":0}]} strokeColor="#8D2323" />
           <schematicpath points={[{"x":0,"y":0},{"x":0,"y":-0.2}]} strokeColor="#8D2323" />
-          <port name="pin1" pinNumber={1} aliases={["ANT"]} direction="down" schX={0} schY={-0.4} schStemLength={0.2} />
+          <port name="pin1" pinNumber={1} aliases={["1"]} direction="down" schX={0} schY={-0.4} schStemLength={0.2} />
           <schematicpath points={[{"x":0,"y":0},{"x":0,"y":0.3}]} strokeColor="#880000" />
           <port name="pin2" pinNumber={2} aliases={["2"]} direction="up" schX={0} schY={0.3} schStemLength={0.2} />
         </symbol>

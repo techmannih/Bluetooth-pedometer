@@ -1,9 +1,43 @@
-# R2 engineering review — 2026-09-05
+# Engineering review — R4 routed layout, 2026-09-06
 
 Status: improved prototype, **not fabrication released**. Automated checks and
 physical readiness are separate. See VALIDATION.md for the current check run.
 
-## Corrections implemented
+## R4 layout and routing
+
+The charger moves to (-6, 8) mm, the MCU/RF cluster moves upward by 2 mm,
+and the accelerometer moves into the central area. Edge connectors and the
+antenna exclusion remain accessible. J2/J3/J4 now declare their actual vertical
+mating direction without changing any imported pad or body geometry.
+
+The full copper is explicitly authored in `routing.tsx`: 303 layer paths,
+138 unique 0.20/0.45 mm through-vias, and all 46 nets physically continuous.
+The native build, independent routing DRC, required-port check, placement and
+100 pixels/mm all-layer Gerber shorts check pass. Automatic rerouting is off;
+the installed solver still has unresolved defects. Source-to-net connectivity
+and the 59-part BOM are preserved. See [VALIDATION.md](VALIDATION.md).
+
+These checks close the open routing task. The RF, decoupling/DC-DC return,
+fabrication-process and assembled-hardware reviews below still apply.
+
+## R3 electrical changes retained
+
+R3 adds explicit top-layer charger fanout outside the ball array,
+retains 0.20/0.45 mm through-vias, turns the MCU/crystal group toward the
+antenna, and supplies explicit RF and exposed-pad ground paths. C5 increases
+from 1 to 4.7 uF to meet TI's VINLS bypass sizing guidance. R6/R7 become
+100 kOhm to reduce asserted status-line current; their rise time and leakage
+margin need measurement. BOM references are synchronized with these changes.
+
+Trace-to-pad clearance increases to 0.05 mm, while pad-to-pad and via-to-pad
+clearances increase to 0.10 mm. These remain fine-geometry rules requiring
+process review. The build now checks error records and calls the bundled
+native PCB-port connectivity check: the installed CLI can return exit 0 after
+an autorouter failure. No dependency code or
+error records were patched. Validation history below must not be substituted
+for the latest source's results in [VALIDATION.md](VALIDATION.md).
+
+## Earlier R2 corrections
 
 - U1 pin 1 (VDDR2) was disconnected. Both VDDR pins now share the internal
   supply network; C16 becomes a local 100 nF VDDR bypass. C10–C15 were moved
@@ -38,9 +72,9 @@ physical readiness are separate. See VALIDATION.md for the current check run.
 
 | Priority | Finding | Required closure |
 | --- | --- | --- |
-| High | Existing 0.075 mm traces, 0.04–0.05 mm clearance and 0.1 mm drills are not a normal JLCPCB 4-layer rule set. | Select an approved process/stackup and reroute under its actual rules. Do not reduce clearance just to get a green check. |
-| High | Full-stack 0.1 mm escape vias do not constitute an approved HDI process. | Verify via layer pairs, drill files, lamination, aspect ratio and filled/capped via-in-pad with the manufacturer. |
-| High | U1's ANT/X48 pins face away from the present antenna/crystal cluster. Generic autorouting does not implement RF impedance or a suitable crystal loop. | Reorient/re-place the RF/clock cluster, constrain critical routes to the top layer over continuous ground, and set feed width using the approved stackup. Retune the exact antenna in the enclosure. |
+| High | The source uses 0.20 mm drills / 0.45 mm via copper, 0.075 mm minimum traces, 0.05 mm trace-to-pad and 0.10 mm pad/via-to-pad clearances. These are not a complete normal JLCPCB rule set. | Select an approved process/stackup and close every actual exported clearance against it. Do not reduce clearance just to get a green check. |
+| High | Standard-size through-vias require BGA escape outside the ball field; larger drill settings alone are not DFM approval. | Verify final drill files, layer spans, annular rings and BGA escape geometry with the fabricator. Do not infer Economic PCBA eligibility from via dimensions. |
+| High | U1 now faces its RF filter, and RF/crystal signals have explicit top routes. The generic feed width is still not a calculated impedance. | Confirm continuous RF ground, calculate feed impedance from the approved stackup, review decoupling/DC-DC return geometry, verify crystal startup/frequency and tune the antenna in the enclosure. |
 | High | Exact battery and OLED module remain unspecified. | Approve pack voltage/current/NTC, protection and cable polarity; verify OLED 3 V compatibility, current, input capacitance and ramp behavior. |
 | Medium | USB TVS alone does not establish system ESD immunity; exposed CC, SWD and cable pins require review. | Check clamp voltage at relevant current and return inductance; add suitable low-capacitance protection where testing requires it. |
 | Medium | J5 BAT is before the gauge shunt; powered accessories there bypass measurement. J4 voltage pin can backfeed the regulator. | Use J5 BAT for high-impedance measurement only; use J4 as target reference, not a supply input. |
