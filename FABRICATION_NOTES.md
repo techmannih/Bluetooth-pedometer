@@ -8,16 +8,22 @@
   includes the L2 GND pour; minimize remaining L2 signal length during final
   fabrication-CAD review to make the return plane as continuous as practical.
 - 0.075 mm (3 mil) nominal fine-pitch routes in the BGA escape regions.
-- The routed design uses 0.05 mm trace-to-trace and 0.04 mm trace-to-pad
-  clearances; confirm that the selected HDI process explicitly supports them.
+- The source sets a 0.04 mm trace-to-pad minimum; inspect actual trace-to-trace
+  clearances in the final routed output and confirm that the selected process
+  explicitly supports all fine-pitch rules.
 - The local 0.1 mm escape vias span all four layers, NOT blind laser
   microvias. These are not an approved drill/lamination specification.
   This layout is not released for a standard JLCPCB 4-layer
-  process. Agree the escape strategy, drill sizes/layer pairs, annular rings
-  and filled/capped via-in-pad process before rerouting/exporting for manufacture.
+  process. Agree the escape strategy, drill sizes/layer pairs and annular rings
+  before rerouting/exporting for manufacture. Any future approved via-in-pad
+  revision also requires a filled/capped process review.
   See [JLCPCB capabilities](https://jlcpcb.com/capabilities/pcb-capabilities/).
 - Do not substitute ordinary open through-vias in BGA pads; solder wicking can
   create opens and package collapse problems.
+- The current manual escapes avoid solderable pads. U1's five ground vias
+  have moved outside the QFN pad field; they are not a direct EP thermal-via
+  array. Review the exposed-pad connection, RF return inductance and thermal
+  path before release. Inspect autorouted vias too, not only the manual ones.
 - Keep the dedicated U2 GND escape via adjacent to the A4 ball; it prevents the
   charger-input escape from crossing the local ground route.
 - Request controlled 50 ohm geometry for the RF feed based on the fabricator's
@@ -109,8 +115,10 @@ together. J4 pin 1 is SWD target reference; do not inject a debugger supply.
 - [ ] PCB trace, via, pad, edge, and keepout DRC are zero in the fabrication
       CAD tool using the selected vendor's rules.
 - [ ] Gerber/ODB++, drill, solder paste, and IPC-356/netlist outputs agree.
-- [ ] BGA solder paste apertures and filled-via process are approved by the
-      assembler.
+- [ ] BGA solder paste apertures and escape-via process are approved by the
+      assembler; any deliberately reintroduced via-in-pad is filled/capped.
+- [ ] U1 exposed-pad ground return and thermal path are approved for the
+      external-ground-via layout.
 - [ ] Cell data sheet and written charger register configuration are approved.
 - [ ] RF stackup calculation and antenna tune plan are approved.
 - [ ] A five-board engineering build precedes any wearable/user trial.

@@ -4,7 +4,36 @@
 claims. A successful CLI exit is not sufficient: inspect the routed artifact
 and run the separate Gerber copper-short check.
 
-## Latest: native CLI workflow without custom scripts
+## Latest: no-via-in-pad layout follow-up
+
+**Placement/routed verification is in progress; earlier passes and artifact
+hashes below do not describe the current via layout.**
+
+The user's removal of `isViaInPadAllowed` exposed 12 pre-existing in-pad vias.
+The native baseline placement check reproduced all 12 errors. That removal,
+and the removal of the explicit autorouter configuration/version, are preserved.
+No placement-check bypass, dependency patch or relaxed clearance is introduced.
+
+The 12 vias have moved outside the solderable pads: U2's outer-row escapes
+extend beyond the package's pad field, /LP uses an interstitial dogbone, U1
+reset/RF ground and U4 ground escape beyond their pad edges, and the five U1
+ground stitching vias sit outside the QFN pad field. Via sizes and nets are
+unchanged. The five external ground vias are **not equivalent to the former
+direct EP thermal-via array**; ground-return/RF and thermal performance require
+review before release. Existing fine-trace/drill manufacturing blockers remain.
+
+The first route exposed a topology-merger failure: rounding the /LP dogbone
+position to (-9.9, 2.4) mm slightly overlapped rectangular routing bounds.
+Using the actual four-pad midpoint (-9.899925, 2.399923) mm resolved that input
+conflict without changing pads, via diameter or clearance rules. A subsequent
+full route had no via-in-pad violations but introduced an SCL-via/VCORE-trace
+contact on inner1, confirmed by the native Gerber checker. The SCL escape
+anchor moved east to x = -8.9 mm for the next reroute. Failing artifacts are
+retained; successful build exits alone have not been counted as a pass.
+
+Evidence is under the ignored `checks/no-via-in-pad/` directory.
+
+## Previous: native CLI workflow without custom scripts
 
 At the user's request, the deleted custom validation scripts are not restored.
 `package.json` no longer calls `scripts/audit-circuit.mjs`; the `audit`, `test`

@@ -42,10 +42,8 @@ export const BluetoothPedometer = () => (
     thickness="1mm"
     material="fr4"
     layers={4}
-    isViaInPadAllowed
     solderMaskColor="#173f2f"
     defaultTraceWidth="0.075mm"
-    autorouter={{ preset: "auto", traceClearance: "0.05mm", serverCacheEnabled: false }}
     minTraceWidth="0.075mm"
     minTraceToPadEdgeClearance="0.04mm"
     minPadEdgeToPadEdgeClearance="0.025mm"
@@ -53,7 +51,6 @@ export const BluetoothPedometer = () => (
     minViaHoleEdgeToViaHoleEdgeClearance="0.05mm"
     minViaHoleDiameter="0.1mm"
     minViaPadDiameter="0.2mm"
-    autorouterVersion="beta_pipeline7"
     autorouterEffortLevel="5x"
     schMaxTraceDistance="3mm"
   >
@@ -136,19 +133,18 @@ export const BluetoothPedometer = () => (
         TS: "net.BAT_NTC",
       }}
     />
-    {/* Escape LSLDO at D4 and VIO immediately east of E1, keeping the short
-        VIO top-layer fanout away from SCL. In-pad vias require the filled/
-        capped process in the fabrication notes. */}
-    <via name="U2_LDO_ESCAPE" pcbX={-10.09995} pcbY={2.599948} connectsTo="net.VCORE" outerDiameter="0.2mm" holeDiameter="0.1mm" />
+    {/* Escape LSLDO north of D4 and VIO east of E1 without drilling pads. */}
+    <via name="U2_LDO_ESCAPE" pcbX={-10.09995} pcbY={3} connectsTo="net.VCORE" outerDiameter="0.2mm" holeDiameter="0.1mm" />
     <via name="U2_VIO_ESCAPE" pcbX={-9.2499} pcbY={1.400052} connectsTo="net.VCORE" outerDiameter="0.2mm" holeDiameter="0.1mm" />
-    {/* Escape /PG at B1 instead of routing across the adjacent /MR (C1) ball. */}
-    <via name="U2_PG_ESCAPE" pcbX={-10.90005} pcbY={1.400052} connectsTo="net.PMIC_PG" outerDiameter="0.2mm" holeDiameter="0.1mm" />
-    {/* Drop VDD at D1 before it can cross the ADCIN ground fanout. */}
-    <via name="U2_VDD_ESCAPE" pcbX={-10.09995} pcbY={1.400052} connectsTo="net.PMIC_VDD_1V8" outerDiameter="0.2mm" holeDiameter="0.1mm" />
-    {/* Keep SCL's layer change clear of the PMIC interrupt escape. */}
-    <via name="U2_SCL_ESCAPE" pcbX={-9.2499} pcbY={2.199898} connectsTo="net.I2C_SCL" outerDiameter="0.2mm" holeDiameter="0.1mm" />
-    {/* Escape /LP at its D3 ball so it does not cross the VCORE fanout. */}
-    <via name="U2_LP_ESCAPE" pcbX={-10.09995} pcbY={2.199898} connectsTo="net.PMIC_LP" outerDiameter="0.2mm" holeDiameter="0.1mm" />
+    {/* Escape /PG south of B1, clear of the adjacent /MR (C1) ball. */}
+    <via name="U2_PG_ESCAPE" pcbX={-10.90005} pcbY={1} connectsTo="net.PMIC_PG" outerDiameter="0.2mm" holeDiameter="0.1mm" />
+    {/* Drop VDD south of D1, clear of the ADCIN ground fanout. */}
+    <via name="U2_VDD_ESCAPE" pcbX={-10.09995} pcbY={1} connectsTo="net.PMIC_VDD_1V8" outerDiameter="0.2mm" holeDiameter="0.1mm" />
+    {/* Anchor SCL's layer change clear of the inner-layer VCORE link. */}
+    <via name="U2_SCL_ESCAPE" pcbX={-8.9} pcbY={2.199898} connectsTo="net.I2C_SCL" outerDiameter="0.2mm" holeDiameter="0.1mm" />
+    {/* /LP dogbone at the exact midpoint of D3/D4/E3/E4. Rounding this
+        location makes the router's rectangular obstacle bounds intersect. */}
+    <via name="U2_LP_ESCAPE" pcbX={-9.899925} pcbY={2.399923} connectsTo="net.PMIC_LP" outerDiameter="0.2mm" holeDiameter="0.1mm" />
     {/* Local ground escape prevents U2's A4 ball from crossing the IN trace. */}
     <via name="U2_GND_ESCAPE" pcbX={-11.8} pcbY={3.2} connectsTo="net.GND" outerDiameter="0.3mm" holeDiameter="0.1mm" />
     <capacitor name="C1" capacitance="4.7uF" maxVoltageRating="10V" footprint="cap0603" manufacturerPartNumber="CL10A475KP8NNNC" supplierPartNumbers={{ jlcpcb: ["C1705"] }} schSheetName="power" pcbX={-12.5} pcbY={4.7} schX={-4.5} schY={5.8} schOrientation="vertical" connections={{ pin1: "net.CHARGER_IN", pin2: "net.GND" }} />
@@ -318,19 +314,19 @@ export const BluetoothPedometer = () => (
       layers={["bottom", "inner1", "inner2"]}
     />
 
-    {/* Filled/tented ground vias under the MCU exposed pad. */}
     {/* Keep SDA's escape perpendicular to pin 22, away from adjacent pin 21.
         The previous automatic escape crossed the unused DIO25 pad. */}
     <via name="U1_SDA_ESCAPE" pcbX={4.400048} pcbY={6.2} connectsTo="net.I2C_SDA" outerDiameter="0.3mm" holeDiameter="0.1mm" />
-    {/* Keep the debugger reset escape local to pin 25, away from VDDR. */}
-    <via name="U1_RST_ESCAPE" pcbX={3.199898} pcbY={5.407412} connectsTo="net.MCU_RSTN" outerDiameter="0.2mm" holeDiameter="0.1mm" />
-    {/* Ground pin 40 directly instead of placing an automatic via against VDDR2. */}
-    <via name="U1_RFGND_ESCAPE" pcbX={0.592588} pcbY={1.199902} connectsTo="net.GND" outerDiameter="0.2mm" holeDiameter="0.1mm" />
-    <via name="U1_GND_V1" pcbX={2.1} pcbY={2.1} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
-    <via name="U1_GND_V2" pcbX={3.9} pcbY={2.1} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
-    <via name="U1_GND_V3" pcbX={2.1} pcbY={3.9} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
-    <via name="U1_GND_V4" pcbX={3.9} pcbY={3.9} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
-    <via name="U1_GND_V5" pcbX={3} pcbY={3} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
+    {/* Reset and RF ground escape beyond their pad edges. */}
+    <via name="U1_RST_ESCAPE" pcbX={3.199898} pcbY={6} connectsTo="net.MCU_RSTN" outerDiameter="0.2mm" holeDiameter="0.1mm" />
+    <via name="U1_RFGND_ESCAPE" pcbX={0.1} pcbY={1.199902} connectsTo="net.GND" outerDiameter="0.2mm" holeDiameter="0.1mm" />
+    {/* Ground stitching outside the QFN pad field. This is not the previous
+        direct EP thermal-via array; its RF/thermal return needs review. */}
+    <via name="U1_GND_V1" pcbX={0.3} pcbY={0.3} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
+    <via name="U1_GND_V2" pcbX={5.7} pcbY={0.3} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
+    <via name="U1_GND_V3" pcbX={0.3} pcbY={5.7} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
+    <via name="U1_GND_V4" pcbX={5.7} pcbY={5.7} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
+    <via name="U1_GND_V5" pcbX={3} pcbY={0} connectsTo="net.GND" outerDiameter="0.45mm" holeDiameter="0.2mm" />
 
     <PZ200V_11_05P
       name="J4"
@@ -366,8 +362,8 @@ export const BluetoothPedometer = () => (
       }}
       noConnect={["NC1", "NC2"]}
     />
-    {/* Local ground-plane access avoids a long top-layer return across VDDIO. */}
-    <via name="U4_GND_ESCAPE" pcbX={4.750064} pcbY={-7.42497} connectsTo="net.GND" outerDiameter="0.2mm" holeDiameter="0.1mm" />
+    {/* Ground-plane access north of pin 9, outside its solderable pad. */}
+    <via name="U4_GND_ESCAPE" pcbX={4.750064} pcbY={-6.9} connectsTo="net.GND" outerDiameter="0.2mm" holeDiameter="0.1mm" />
     <capacitor name="C22" capacitance="100nF" maxVoltageRating="16V" footprint="cap0402" manufacturerPartNumber="CL05B104KO5NNNC" supplierPartNumbers={{ jlcpcb: ["C1525"] }} schSheetName="io" pcbX={2} pcbY={-9.8} schX={-7} schY={0.2} schOrientation="vertical" connections={{ pin1: "net.VCORE", pin2: "net.GND" }} />
     <capacitor name="C23" capacitance="100nF" maxVoltageRating="16V" footprint="cap0402" manufacturerPartNumber="CL05B104KO5NNNC" supplierPartNumbers={{ jlcpcb: ["C1525"] }} schSheetName="io" pcbX={6.3} pcbY={-11.1} schX={-5.5} schY={0.2} schOrientation="vertical" connections={{ pin1: "net.VCORE", pin2: "net.GND" }} />
     <silkscreentext text="+X" pcbX={7} pcbY={-7.8} fontSize="0.5mm" />
