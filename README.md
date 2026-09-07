@@ -9,16 +9,19 @@ SSD1306 OLED module.
 Components and placement are in [`index.circuit.tsx`](./index.circuit.tsx);
 the complete native copper paths are in [`routing.tsx`](./routing.tsx). They generate a
 46.6 mm x 32 mm, 1 mm-thick, 4-layer prototype PCB (about 9% less area than
-the previous 48.2 mm x 34 mm layout). Standard passives use native
-tscircuit elements and standard footprints (`res0402`, `cap0402`, etc.), as
-requested. Geometry-sensitive parts use raw JLCPCB imports. All 59 fitted parts
+the previous 48.2 mm x 34 mm layout). Resistors and capacitors use native
+tscircuit elements and standard footprints (`res0402`, `cap0402`, etc.).
+L1/L2 and D1 use package-specific wrappers; other geometry-sensitive parts
+use JLCPCB imports with documented corrections. All 59 fitted parts
 retain locked LCSC codes—33 unique supplier codes. Generic passive footprints
 and CAD must still be checked against the selected supplier part. See
-[`JLCPCB_PARTS.md`](./JLCPCB_PARTS.md) and [`BOM.csv`](./BOM.csv).
+[`PACKAGE_AUDIT.md`](./PACKAGE_AUDIT.md) for the corrected L1/L2/D1 packages and
+remaining footprint/CAD discrepancies, [`JLCPCB_PARTS.md`](./JLCPCB_PARTS.md)
+and [`BOM.csv`](./BOM.csv).
 
 **R4: complete routing, with components spread across the board.** Charger and
 service connections occupy the upper left, the MCU/RF cluster the upper right,
-and the accelerometer the centre. All 46 nets / 211 connected fitted-part pins
+and the accelerometer the centre. All 48 nets / 215 connected fitted-part pins
 pass the independent copper-continuity audit. Native routing checks report zero
 errors; the all-layer Gerber shorts check also passes at 100 pixels/mm.
 The board contains 303 explicit layer paths and 138 through-vias.

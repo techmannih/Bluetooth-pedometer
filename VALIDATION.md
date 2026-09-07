@@ -5,6 +5,29 @@ covers the current source. R3 and older sections preserve historical results.
 A successful CLI exit alone is insufficient: the build separately runs native
 routing DRC, required-port connectivity and Gerber copper-short detection.
 
+## 2026-09-07 — Footprint, symbol and CAD audit
+
+The [package audit](./PACKAGE_AUDIT.md) supersedes any interpretation of prior
+build/import checks as a complete mechanical sign-off. L2 now uses Murata RF
+lands and supplier CAD, L1 uses its supplier footprint and a nominal-height
+JSCAD model, and D1 uses TECH PUBLIC's bidirectional symbol/lands and supplier
+CAD. J5 gains top-entry mating metadata. All supplier codes are preserved.
+
+Typecheck, full build, PCB placement, native routing/required-port checks,
+default and 100 pixels/mm all-layer Gerber shorts, and independent copper
+continuity pass: 215 connected fitted-part pins / 48 nets, zero opens/shorts.
+All 231 physical pin/net/NC mappings and 59 BOM references match pre-review
+baseline `26945dd8bf85d4cdc27cff8aad63b1e986591e0b`. Only L1/L2/D1 pad geometry
+changes. Snapshots were regenerated and comparison passes; D1's symbol/labels and PCB preview were
+inspected, and the L1 JSCAD envelope was measured through the CAD converter.
+
+There are still 36 supplier-footprint mismatch advisories and imported
+metadata/courtyard notices. U5/U4/U3 supplier CAD, generic resistor/0603
+capacitor CAD and several manufacturer land-pattern differences remain
+documented in the audit. Passing connectivity does not resolve them. No
+firmware or physical-board testing was performed in this package review.
+Evidence: `checks/package-audit-2026-09-07/`.
+
 ## 2026-09-07 — Recheck after U5 and USB-C symbol changes
 
 Fresh builds of the working tree and committed baseline `ff525a75` preserve

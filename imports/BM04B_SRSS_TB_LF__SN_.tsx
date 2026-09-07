@@ -18,7 +18,7 @@ export const BM04B_SRSS_TB_LF__SN_ = (props: ChipProps) => {
   ]
 }}
       manufacturerPartNumber="BM04B-SRSS-TB(LF)(SN)"
-      footprint={<footprint>
+      footprint={<footprint insertionDirection="from_above">
         <smtpad portHints={["pin1"]} pcbX="-1.499997mm" pcbY="-1.3250037mm" width="0.5999988mm" height="1.5500096mm" shape="rect" />
 <smtpad portHints={["pin2"]} pcbX="-0.499999mm" pcbY="-1.3250037mm" width="0.5999988mm" height="1.5500096mm" shape="rect" />
 <smtpad portHints={["pin3"]} pcbX="0.499999mm" pcbY="-1.3250037mm" width="0.5999988mm" height="1.5500096mm" shape="rect" />

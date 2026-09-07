@@ -17,6 +17,9 @@ import {
   SKRPACE010,
   TPS22918DBVR,
   TYPE_C_31_M_12,
+  LQP03TN2N8B02D,
+  SLM1608100MIT,
+  PESD5V0S1BA,
 } from "./imports/JlcParts"
 
 const BOARD = { width: 46.6, height: 32, cornerRadius: 2 }
@@ -176,7 +179,7 @@ export const BluetoothPedometer = () => (
     <silkscreentext text="D-" pcbX={-10.5} pcbY={1.45} fontSize="0.45mm" />
     <resistor name="R1" resistance="5.1k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF5101TCE" supplierPartNumbers={{ jlcpcb: ["C25905"] }} schSheetName="power" pcbX={-20} pcbY={7} schX={-8} schY={6.8} schOrientation="vertical" connections={{ pin1: "net.USB_CC1", pin2: "net.GND" }} />
     <resistor name="R2" resistance="5.1k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF5101TCE" supplierPartNumbers={{ jlcpcb: ["C25905"] }} schSheetName="power" pcbX={-20} pcbY={-7} schX={-8} schY={2.2} schOrientation="vertical" connections={{ pin1: "net.USB_CC2", pin2: "net.GND" }} />
-    <diode name="D1" variant="tvs" footprint="sod323" manufacturerPartNumber="PESD5V0S1BA" supplierPartNumbers={{ jlcpcb: ["C2827694"] }} schSheetName="power" pcbX={-15.5} pcbY={-2.8} pcbRotation={90} schX={-4.5} schY={4} schOrientation="vertical" connections={{ pin1: "net.GND", pin2: "net.USB_VBUS" }} />
+    <PESD5V0S1BA name="D1" schSheetName="power" pcbX={-15.5} pcbY={-2.8} pcbRotation={90} schX={-4.5} schY={4} schOrientation="vertical" connections={{ pin1: "net.GND", pin2: "net.USB_VBUS" }} />
     <BLM18PG221SN1D name="FB1" schSheetName="power" pcbX={-14.7} pcbY={2} schX={-4.5} schY={6.8} connections={{ pin1: "net.USB_VBUS", pin2: "net.CHARGER_IN" }} />
     <capacitor name="C1" capacitance="4.7uF" maxVoltageRating="10V" footprint="cap0603" manufacturerPartNumber="CL10A475KP8NNNC" supplierPartNumbers={{ jlcpcb: ["C1705"] }} schSheetName="power" pcbX={-10} pcbY={5.2} pcbRotation={180} schX={-2} schY={6.8} schOrientation="vertical" connections={{ pin1: "net.CHARGER_IN", pin2: "net.GND" }} />
 
@@ -364,7 +367,7 @@ export const BluetoothPedometer = () => (
     />
 
     {/* Dedicated Decoupling and Power conversion block */}
-    <inductor name="L1" inductance="10uH" maxCurrentRating="150mA" footprint="res0603" manufacturerPartNumber="SLM1608100MIT" supplierPartNumbers={{ jlcpcb: ["C2831366"] }} schSheetName="mcu" pcbX={14.800000} pcbY={1.7} pcbRotation={0} schX={5.5} schY={6.5} connections={{ pin1: "net.DCDC_SW", pin2: "net.VDDR" }} />
+    <SLM1608100MIT name="L1" schSheetName="mcu" pcbX={14.800000} pcbY={1.7} pcbRotation={0} schX={5.5} schY={6.5} connections={{ pin1: "net.DCDC_SW", pin2: "net.VDDR" }} />
     <capacitor name="C9" capacitance="10uF" maxVoltageRating="6.3V" footprint="cap0603" manufacturerPartNumber="CL10A106MQ8NNNC" supplierPartNumbers={{ jlcpcb: ["C1691"] }} schSheetName="mcu" pcbX={18.000000} pcbY={1.7} pcbRotation={0} schX={7.5} schY={6.5} schOrientation="vertical" connections={{ pin1: "net.VDDR", pin2: "net.GND" }} />
     <capacitor name="C10" capacitance="100nF" maxDecouplingTraceLength="1.5mm" maxVoltageRating="16V" footprint="cap0402" manufacturerPartNumber="CL05B104KO5NNNC" supplierPartNumbers={{ jlcpcb: ["C1525"] }} schSheetName="mcu" pcbX={13.15} pcbY={6.5} pcbRotation={90} schX={9.5} schY={6.5} schOrientation="vertical" connections={{ pin1: "net.VDDR", pin2: "net.GND" }} />
     <capacitor name="C16" capacitance="100nF" maxVoltageRating="16V" footprint="cap0402" manufacturerPartNumber="CL05B104KO5NNNC" supplierPartNumbers={{ jlcpcb: ["C1525"] }} schSheetName="mcu" pcbX={11.300000} pcbY={11.3} pcbRotation={90} schX={11.5} schY={6.5} schOrientation="vertical" connections={{ pin1: "net.VDDR", pin2: "net.GND" }} />
@@ -428,7 +431,7 @@ export const BluetoothPedometer = () => (
 
     {/* RF Filter and Antenna */}
     <capacitor name="C20" capacitance="1.5pF" maxVoltageRating="50V" footprint="cap0201" manufacturerPartNumber="GRM0335C1H1R5BA01D" supplierPartNumbers={{ jlcpcb: ["C161414"] }} schSheetName="mcu" schSectionName="rf" pcbX={13} pcbRotation={90} pcbY={9.83} schX={-2} schY={-8.2} schOrientation="vertical" connections={{ pin1: "net.RF_RAW", pin2: "net.GND" }} />
-    <inductor name="L2" inductance="2.8nH" footprint="res0201" manufacturerPartNumber="LQP03TN2N8B02D" supplierPartNumbers={{ jlcpcb: ["C206433"] }} schSheetName="mcu" schSectionName="rf" pcbX={14.1} pcbRotation={0} pcbY={9.5} schX={0.5} schY={-7.5} connections={{ pin1: "net.RF_RAW", pin2: "net.RF_FILTERED" }} />
+    <LQP03TN2N8B02D name="L2" schSheetName="mcu" schSectionName="rf" pcbX={14.1} pcbRotation={0} pcbY={9.5} schX={0.5} schY={-7.5} connections={{ pin1: "net.RF_RAW", pin2: "net.RF_FILTERED" }} />
     <capacitor name="C21" capacitance="1.5pF" maxVoltageRating="50V" footprint="cap0201" manufacturerPartNumber="GRM0335C1H1R5BA01D" supplierPartNumbers={{ jlcpcb: ["C161414"] }} schSheetName="mcu" schSectionName="rf" pcbX={15.2} pcbRotation={90} pcbY={9.83} schX={3} schY={-8.2} schOrientation="vertical" connections={{ pin1: "net.RF_FILTERED", pin2: "net.GND" }} />
     <resistor name="R13" resistance="0" footprint="res0402" manufacturerPartNumber="0402WGF0000TCE" supplierPartNumbers={{ jlcpcb: ["C17168"] }} schSheetName="mcu" schSectionName="rf" pcbX={17.1} pcbRotation={0} pcbY={9.5} schX={5.5} schY={-7.5} connections={{ pin1: "net.RF_FILTERED", pin2: "net.RF_ANT" }} />
     <A_2450AT18A100E name="AE1" schSheetName="mcu" schSectionName="rf" pcbX={20.7} pcbRotation={0} pcbY={9.5} schX={8.5} schY={-7.5} connections={{ pin1: "net.RF_ANT" }} noConnect={["pin2"]} />

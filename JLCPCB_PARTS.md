@@ -1,12 +1,19 @@
 # JLCPCB/LCSC Parts Lock
 
 Every fitted source component in `index.circuit.tsx` has a locked JLCPCB/LCSC
-code. Standard passives use native tscircuit elements with standard footprints
-(`res0402`, `cap0402`, etc.); ICs, connectors, switches,
-crystals, the ferrite bead, and antenna use raw JLCPCB imports where exact
-geometry matters. All 59 fitted parts have supplier codes, representing 33
+code. Resistors and capacitors use native tscircuit elements with standard
+footprints (`res0402`, `cap0402`, etc.). L1/L2 and D1 use package-specific
+wrappers; ICs, connectors, switches, crystals, the ferrite bead and antenna
+use JLCPCB imports with documented local corrections.
+All 59 fitted parts have supplier codes, representing 33
 unique orderable part numbers. Generic passive footprints/models are not
 claimed identical to the supplier package; compare pad geometry before release.
+
+The [2026-09-07 package audit](./PACKAGE_AUDIT.md) records corrected L1/L2/D1
+footprints, symbols and CAD, J5 top-entry metadata, and remaining discrepancies.
+In particular, supplier imports do not guarantee manufacturer-accurate models.
+The complete-import audit below is historical and predates these corrections
+and U5's subsequent six-pin chip symbol.
 
 Catalog availability was checked on 2026-09-05. Stock and assembly tier can
 change, so recheck all codes in the JLCPCB order flow before purchase.
@@ -117,8 +124,8 @@ required electrical role. They must still be validated on first articles.
 | TZ3908AAAO43 | ABM11W-48.0000MHZ-7-B1U-T3, C1985532 | 48 MHz, 7 pF, four-pad crystal |
 | generic 2.0 mm headers | PZ200V-11-07P / -05P | exact JLCPCB THT parts for J3/J4 |
 
-`BOM.csv` is the placement-level BOM. Geometry-sensitive TypeScript wrappers
-and exact footprints/models are under `imports/`, with `imports/JlcParts.ts` as
-the barrel used by the board source. Native passives keep their MPN and LCSC
-code directly on each tscircuit element. The user's native-footprint changes
-were preserved during the R2 review.
+`BOM.csv` is the placement-level BOM. Package wrappers and imported geometry
+are under `imports/`, with `imports/JlcParts.ts` as the barrel used by the board
+source. Native resistors/capacitors keep their MPN and LCSC code directly on
+each element. L1/L2/D1 retain those codes in their wrappers. Geometry accuracy
+and remaining exceptions are documented in `PACKAGE_AUDIT.md`.
