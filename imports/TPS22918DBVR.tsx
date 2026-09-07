@@ -1,4 +1,4 @@
-import type { SwitchProps } from "@tscircuit/props"
+import type { ChipProps } from "@tscircuit/props"
 
 const pinLabels = {
   pin1: ["VIN"],
@@ -9,13 +9,22 @@ const pinLabels = {
   pin6: ["VOUT"]
 } as const
 
-export const TPS22918DBVR = (props: SwitchProps) => {
-  const { name = "SW1", ...restProps } = props
+export const TPS22918DBVR = (props: ChipProps<typeof pinLabels>) => {
+  const { name = "U", ...restProps } = props
 
   return (
-    <switch
+    <chip
       name={name}
       pinLabels={pinLabels}
+      schWidth={2.4}
+      schHeight={2.4}
+      schPinArrangement={{ leftSide: ["pin1", "pin3", "pin4"], rightSide: ["pin6", "pin5", "pin2"] }}
+      schPinStyle={{
+        pin1: { marginBottom: 0.5 },
+        pin3: { marginBottom: 0.5 },
+        pin6: { marginBottom: 0.5 },
+        pin5: { marginBottom: 0.5 },
+      }}
       supplierPartNumbers={{
   "jlcpcb": [
     "C131941"

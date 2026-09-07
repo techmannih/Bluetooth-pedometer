@@ -5,6 +5,44 @@ covers the current source. R3 and older sections preserve historical results.
 A successful CLI exit alone is insufficient: the build separately runs native
 routing DRC, required-port connectivity and Gerber copper-short detection.
 
+## 2026-09-07 — Recheck after U5 and USB-C symbol changes
+
+Fresh builds of the working tree and committed baseline `ff525a75` preserve
+all 231 component pin/net and no-connect mappings. PCB geometry is identical;
+J1 gains only the native connector's cable-insertion metadata. U5's six-pin
+mapping and direct QOD-to-VOUT connection agree with the
+[TI TPS22918 datasheet, section 5](https://www.ti.com/lit/ds/symlink/tps22918.pdf).
+All 16 application GPIO net assignments still match the firmware; the unused
+SPI MISO input DIO25 remains a no-connect.
+
+| Fresh check | Result |
+| --- | --- |
+| TypeScript, native netlist and PCB placement | PASS; placement has 0 errors / 0 warnings |
+| Full package build, routing DRC and required-port connectivity | PASS |
+| All-layer Gerber shorts, default and 100 pixels/mm | PASS; no shorts |
+| Independent physical copper continuity | PASS; 215 connected fitted-part pins / 48 nets, no opens or shorts |
+| PCB and complete schematic snapshot comparison | PASS; both match the working-tree snapshots |
+| Firmware host tests with sanitizers | PASS |
+| Existing default firmware HEX/ELF and generated pin checks | PASS; image hash matches `firmware/VALIDATION.md` |
+
+Schematic placement exits successfully but still reports presentation advisories,
+including extra pin-edge padding on J1 and U5. Supplier-footprint, courtyard and
+pin-metadata notices also remain; this is not a warning-free manufacturing
+release. No functional regression was found in the changed symbols. No board
+was flashed or measured, and the supplied firmware still inhibits charging
+pending a verified battery profile. Evidence is in `checks/recheck-2026-09-07/`.
+
+## 2026-09-07 — U5 load-switch IC symbol
+
+TPS22918DBVR is represented as a six-pin chip instead of a mechanical switch.
+Its U5 reference is retained. VIN (1), GND (2), ON (3), CT (4), QOD (5) and
+VOUT (6) match the TI TPS22918 datasheet, section 5. All six pins are visible
+in the schematic; the incorrect interchangeable-pin switch metadata is gone.
+Typecheck, the full build, required-port/routing checks and the all-layer
+Gerber shorts check pass. All electrical pin/net memberships and all PCB
+elements compare unchanged. The regenerated schematic was inspected in Chrome;
+evidence is in `checks/u5-symbol/`.
+
 ## 2026-09-07 — PCB connector silkscreen
 
 All 19 electrical contacts on J2, J3, J4 and J5 were checked against their

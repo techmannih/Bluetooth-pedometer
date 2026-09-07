@@ -127,7 +127,7 @@ export const BluetoothPedometer = () => (
       pcbY={0}
       pcbRotation={270}
       allowOffBoard
-      schX={-10}
+      schX={-12}
       schY={4.5}
       connections={{
         VBUS1: "net.USB_VBUS",

@@ -1,28 +1,49 @@
-import type { ChipProps } from "@tscircuit/props"
+import type { ConnectorProps } from "@tscircuit/props"
 
+// Canonical USB-C names enable the native symbol; retain every imported
+// pad number and alias so the existing connections and routes still resolve.
 const pinLabels = {
-  pin1: ["EH2"],
-  pin2: ["EH1"],
-  pin3: ["EH4"],
-  pin4: ["EH3"],
-  pin5: ["B8","SBU2"],
-  pin6: ["A5","CC1"],
-  pin7: ["B7","DN2"],
-  pin8: ["A6","DP1"],
-  pin9: ["A7","DN1"],
-  pin10: ["B6","DP2"],
-  pin11: ["A8","SBU1"],
-  pin12: ["B5","CC2"],
-  pin13: ["A1B12","GND1"],
-  pin14: ["B1A12","GND2"],
-  pin15: ["B4A9","VBUS1"],
-  pin16: ["A4B9","VBUS2"]
+  pin1: ["SHELL2", "EH2"],
+  pin2: ["SHELL1", "EH1"],
+  pin3: ["SHELL4", "EH4"],
+  pin4: ["SHELL3", "EH3"],
+  pin5: ["SBU2", "B8"],
+  pin6: ["CC1", "A5"],
+  pin7: ["DM2", "DN2", "B7"],
+  pin8: ["DP1", "A6"],
+  pin9: ["DM1", "DN1", "A7"],
+  pin10: ["DP2", "B6"],
+  pin11: ["SBU1", "A8"],
+  pin12: ["CC2", "B5"],
+  pin13: ["GND1", "A1B12"],
+  pin14: ["GND2", "B1A12"],
+  pin15: ["VBUS1", "B4A9"],
+  pin16: ["VBUS2", "A4B9"]
 } as const
 
-export const TYPE_C_31_M_12 = (props: ChipProps<typeof pinLabels>) => {
+export const TYPE_C_31_M_12 = (props: ConnectorProps) => {
   return (
-    <chip
+    <connector
+      standard="usb_c"
       pinLabels={pinLabels}
+      schWidth={3.8}
+      schHeight={5}
+      schPinStyle={{
+        pin15: { marginBottom: 0.15 },
+        pin16: { marginBottom: 0.25 },
+        pin6: { marginBottom: 0.15 },
+        pin12: { marginBottom: 0.25 },
+        pin8: { marginBottom: 0.15 },
+        pin10: { marginBottom: 0.15 },
+        pin9: { marginBottom: 0.15 },
+        pin7: { marginBottom: 0.25 },
+        pin11: { marginBottom: 0.15 },
+        pin5: { marginBottom: 0.25 },
+        pin13: { marginBottom: 0.15 },
+        pin2: { marginRight: 0.4 },
+        pin1: { marginRight: 0.4 },
+        pin4: { marginRight: 0.4 },
+      }}
       supplierPartNumbers={{
   "jlcpcb": [
     "C165948"
