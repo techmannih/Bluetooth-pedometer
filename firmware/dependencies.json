@@ -1,0 +1,10 @@
+{
+  "zephyr": {
+    "url": "https://github.com/TexasInstruments/simplelink-zephyr.git",
+    "revision": "498f982e61f0d652a1fbf47438f7686613d87670",
+    "release": "v3.7.0-01.00.00",
+    "modules": ["cmsis", "simplelink-hal_ti", "mbedtls", "tinycrypt"]
+  },
+  "sdk_version": "0.16.8",
+  "bosch_revision": "7d2a223fa5a4080292367c8056bfe1faece96da0"
+}

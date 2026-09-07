@@ -147,7 +147,7 @@ export const BluetoothPedometer = () => (
       }}
       noConnect={["SBU1", "SBU2"]}
     />
-    <silkscreentext text="USB: 5V CHG ONLY (D+/D- TP)" pcbX={-19.6} pcbY={-8.3} fontSize="0.42mm" />
+    <silkscreentext text="USB: 5V CHG ONLY (D+/D- TP)" pcbX={-22.4} pcbY={-8.3} anchorAlignment="center_left" fontSize="0.42mm" />
     <testpoint
       name="TP_DP"
       schSheetName="power"
@@ -233,12 +233,17 @@ export const BluetoothPedometer = () => (
       pcbY={-12.8}
       schX={-9}
       schY={-4}
-      schHeight={0.4}
+      schWidth={2.8}
+      schHeight={1.6}
+      schPinArrangement={{ leftSide: ["pin1", "pin2", "pin3"] }}
+      schPinStyle={{ pin1: { marginBottom: 0.3 }, pin2: { marginBottom: 0.3 } }}
+      pinLabels={{ pin1: "BAT_PACK_POS", pin2: "BAT_NTC", pin3: "GND" }}
       connections={{ pin1: "net.BAT_PACK_POS", pin2: "net.BAT_NTC", pin3: "net.GND" }}
     />
-    <silkscreentext text="[-] GND" pcbX={-20} pcbY={-15.5} fontSize="0.35mm" />
-    <silkscreentext text="[T] NTC" pcbX={-18} pcbY={-15.5} fontSize="0.35mm" />
-    <silkscreentext text="[+] BAT" pcbX={-16} pcbY={-15.5} fontSize="0.35mm" />
+    {/* Top view: this footprint runs pin 3 -> pin 1 from left to right. */}
+    <silkscreentext text="GND" pcbX={-20} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="NTC" pcbX={-18} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="BAT+" pcbX={-16} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
     <SKRPACE010
       name="SW1"
       schSheetName="power"
@@ -258,16 +263,19 @@ export const BluetoothPedometer = () => (
       pcbY={11.2}
       schX={-7}
       schY={-7.5}
-      schHeight={0.6}
-      connections={{
-        pin1: "net.CHARGER_IN",
-        pin2: "net.BAT_PACK_POS",
-        pin3: "net.VCORE",
-        pin4: "net.GND",
-      }}
+      schWidth={3.4}
+      schHeight={1.6}
+      schPinStyle={{ pin1: { marginBottom: 0.3 }, pin2: { marginBottom: 0.3 }, pin4: { marginTop: 0.3 } }}
+      pinLabels={{ pin1: "CHARGER_IN", pin2: "BAT_PACK_POS", pin3: "VCORE", pin4: "GND", pin5: "MOUNT_NC" }}
+      connections={{ pin1: "net.CHARGER_IN", pin2: "net.BAT_PACK_POS", pin3: "net.VCORE", pin4: "net.GND" }}
       noConnect={["pin5"]}
     />
-    <silkscreentext text="J5: 1IN 2BAT 3VCORE 4GND" pcbX={-15} pcbY={14.6} fontSize="0.42mm" />
+    {/* Number the 1 mm-pitch contacts; keep the signal legend clear of the J5 reference. */}
+    <silkscreentext text="1" pcbX={-16.5} pcbY={7.8} anchorAlignment="center" fontSize="0.5mm" />
+    <silkscreentext text="2" pcbX={-15.5} pcbY={7.8} anchorAlignment="center" fontSize="0.5mm" />
+    <silkscreentext text="3" pcbX={-14.5} pcbY={7.8} anchorAlignment="center" fontSize="0.5mm" />
+    <silkscreentext text="4" pcbX={-13.5} pcbY={7.8} anchorAlignment="center" fontSize="0.5mm" />
+    <silkscreentext text="1:IN 2:BAT 3:VCORE 4:GND" pcbX={-15} pcbY={15.35} anchorAlignment="center" fontSize="0.5mm" />
 
     {/* The BQ27427 integrated shunt sits between the cell and charger/system BAT node. */}
     <BQ27427YZFR
@@ -277,7 +285,17 @@ export const BluetoothPedometer = () => (
       pcbY={-5.5}
       schX={3}
       schY={-4.5}
-      schHeight={1}
+      schHeight={2.6}
+      schPinStyle={{
+        ...Object.fromEntries(
+          Array.from({ length: 9 }, (_, i) => [
+            `pin${i + 1}`,
+            { marginTop: 0.1, marginBottom: 0.1 },
+          ]),
+        ),
+        // Leave room above SRX for the VBAT_SYS power flag.
+        pin6: { marginTop: 1.1, marginBottom: 0.1 },
+      }}
       connections={{
         BAT: "net.BAT_PACK_POS",
         SRX: "net.VBAT_SYS",
@@ -291,7 +309,7 @@ export const BluetoothPedometer = () => (
       }}
     />
     <capacitor name="C7" capacitance="1uF" maxVoltageRating="25V" footprint="cap0402" manufacturerPartNumber="CL05A105KA5NQNC" supplierPartNumbers={{ jlcpcb: ["C52923"] }} schSheetName="power" pcbX={-13} pcbY={-6} pcbRotation={180} schX={0} schY={-4.5} schOrientation="vertical" connections={{ pin1: "net.BAT_PACK_POS", pin2: "net.GND" }} />
-    <capacitor name="C8" capacitance="2.2uF" maxVoltageRating="6.3V" footprint="cap0402" manufacturerPartNumber="CL05A225MQ5NSNC" supplierPartNumbers={{ jlcpcb: ["C12530"] }} schSheetName="power" pcbX={-7.5} pcbY={-5.5} pcbRotation={0} schX={6.5} schY={-4.5} schOrientation="vertical" connections={{ pin1: "net.GAUGE_VDD_1V8", pin2: "net.GND" }} />
+    <capacitor name="C8" capacitance="2.2uF" maxVoltageRating="6.3V" footprint="cap0402" manufacturerPartNumber="CL05A225MQ5NSNC" supplierPartNumbers={{ jlcpcb: ["C12530"] }} schSheetName="power" pcbX={-7.5} pcbY={-5.5} pcbRotation={0} schX={7.6} schY={-4.5} schOrientation="vertical" connections={{ pin1: "net.GAUGE_VDD_1V8", pin2: "net.GND" }} />
     <resistor name="R8" resistance="10k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF1002TCE" supplierPartNumbers={{ jlcpcb: ["C25744"] }} schSheetName="power" pcbX={-10} pcbY={-8} pcbRotation={0} schX={1.5} schY={-7.2} schOrientation="vertical" connections={{ pin1: "net.GAUGE_BIN", pin2: "net.GND" }} />
     <resistor name="R9" resistance="10k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF1002TCE" supplierPartNumbers={{ jlcpcb: ["C25744"] }} schSheetName="power" pcbX={-7.5} pcbY={-3.6} pcbRotation={0} schX={5} schY={-7.2} schOrientation="vertical" connections={{ pin1: "net.GAUGE_INT", pin2: "net.VCORE" }} />
     <resistor name="R10" resistance="10k" tolerance="1%" footprint="res0402" manufacturerPartNumber="0402WGF1002TCE" supplierPartNumbers={{ jlcpcb: ["C25744"] }} schSheetName="power" pcbX={1} pcbY={2} pcbRotation={0} schX={9} schY={-5} schOrientation="vertical" connections={{ pin1: "net.I2C_SDA", pin2: "net.VCORE" }} />
@@ -368,7 +386,11 @@ export const BluetoothPedometer = () => (
       pcbY={-14}
       schX={-4.5}
       schY={-4}
-      schHeight={0.6}
+      schWidth={2.8}
+      schHeight={2.6}
+      schPinArrangement={{ leftSide: ["pin1", "pin2", "pin3", "pin4", "pin5"] }}
+      schPinStyle={Object.fromEntries([1, 2, 3, 4].map((pin) => [`pin${pin}`, { marginBottom: 0.3 }]))}
+      pinLabels={{ pin1: "VCORE", pin2: "SWDIO", pin3: "SWDCK", pin4: "MCU_RSTN", pin5: "GND" }}
       connections={{ pin1: "net.VCORE", pin2: "net.SWDIO", pin3: "net.SWDCK", pin4: "net.MCU_RSTN", pin5: "net.GND" }}
     />
     {/* Centre each label under its pin on the header's 2 mm pitch. */}
@@ -472,7 +494,11 @@ export const BluetoothPedometer = () => (
       pcbY={-14}
       schX={9.5}
       schY={3}
-      schHeight={0.8}
+      schWidth={3.2}
+      schHeight={3.6}
+      schPinArrangement={{ leftSide: ["pin1", "pin2", "pin3", "pin4", "pin5", "pin6", "pin7"] }}
+      schPinStyle={Object.fromEntries([1, 2, 3, 4, 5, 6].map((pin) => [`pin${pin}`, { marginBottom: 0.3 }]))}
+      pinLabels={{ pin1: "GND", pin2: "OLED_VCC", pin3: "OLED_SCLK", pin4: "OLED_MOSI", pin5: "OLED_RESET", pin6: "OLED_DC", pin7: "OLED_CS" }}
       connections={{
         pin1: "net.GND",
         pin2: "net.OLED_VCC",

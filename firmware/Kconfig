@@ -1,0 +1,65 @@
+mainmenu "Bluetooth pedometer"
+source "Kconfig.zephyr"
+menu "Pedometer"
+config PEDOMETER_STRIDE_MM
+    int "Default distance per step, mm"
+    range 100 2000
+    default 750
+config PEDOMETER_OLED_HEIGHT
+    int "SSD1306 height (only 32 or 64 supported)"
+    range 32 64
+    default 64
+config PEDOMETER_DISPLAY_SECONDS
+    int "Display timeout"
+    range 3 60
+    default 10
+config PEDOMETER_WRIST
+    bool "Use Bosch wrist step-counter parameters"
+    default n
+config PEDOMETER_BATTERY_PROFILE_APPROVED
+    bool "Enable charging for a verified protected 4.2 V Li-ion pack"
+    default n
+    help
+      Only enable after matching current, capacity, NTC thresholds and
+      chemistry to the actual cell. Default firmware inhibits charging.
+config PEDOMETER_CAPACITY_MAH
+    int "Verified battery capacity, mAh"
+    range 100 500
+    default 100
+config PEDOMETER_NOMINAL_MV
+    int "Battery nominal voltage, mV"
+    range 3600 3800
+    default 3700
+config PEDOMETER_CUTOFF_MV
+    int "Gauge terminate voltage, mV"
+    range 3000 3500
+    default 3200
+config PEDOMETER_CHARGE_UA
+    int "Charge current, multiple of 1250 uA"
+    range 5000 50000
+    default 10000
+config PEDOMETER_PRECHARGE_UA
+    int "Precharge current, multiple of 1250 uA"
+    range 1250 38750
+    default 2500
+config PEDOMETER_TERMINATION_PERCENT
+    int "Termination percent of fast charge current"
+    range 1 31
+    default 10
+config PEDOMETER_TS_COLD
+    hex "Cold threshold ADC byte (verify with actual NTC)"
+    range 0x1 0xff
+    default 0x7c
+config PEDOMETER_TS_COOL
+    hex "Cool threshold ADC byte"
+    range 0x1 0xff
+    default 0x6d
+config PEDOMETER_TS_WARM
+    hex "Warm threshold ADC byte"
+    range 0x1 0xff
+    default 0x38
+config PEDOMETER_TS_HOT
+    hex "Hot threshold ADC byte"
+    range 0x1 0xff
+    default 0x27
+endmenu

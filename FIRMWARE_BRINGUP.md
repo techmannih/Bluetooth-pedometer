@@ -1,5 +1,10 @@
 # Firmware Bring-up
 
+The implemented application is in [`firmware/`](firmware/README.md). Its README
+contains build/flash commands, actual button actions, battery configuration and
+the versioned BLE protocol. Software build/tests have passed; the measurements
+and first-board procedures below still require assembled hardware.
+
 ## Safe first boot
 
 1. Power from a current-limited 5 V bench supply through USB-C with no battery
@@ -38,7 +43,7 @@
     thermal behavior, and gauge accumulation at minimum and maximum allowed
     temperatures.
 
-## Suggested application state machine
+## Application state machine
 
 ```text
 SHIP/OFF --MR or USB--> BOOT -> CONFIGURE -> TRACKING
@@ -89,21 +94,15 @@ TRACKING --explicit power-off / storage command--> SHIP/OFF
 
 ## BLE data model
 
-A small custom GATT service is sufficient:
+The implementation combines steps, distance, battery voltage/SOC, stride,
+uptime, activity and status into one authenticated 20-byte read/notify
+characteristic. A separate authenticated control characteristic handles display,
+reset, ship, stride and time synchronization. Exact UUIDs, byte layout and
+command examples are in [`firmware/README.md`](firmware/README.md#ble-protocol-v1).
 
-| Characteristic | Type | Access |
-| --- | --- | --- |
-| Step count | uint32 | read/notify |
-| Distance | uint32 millimetres | read/notify |
-| Battery state | uint8 percent plus optional mV | read/notify |
-| Daily reset time | uint32 Unix seconds | read/write |
-| Stride length | uint16 millimetres | read/write |
-| Control/status | bitfield | read/write |
-
-Advertise no step history or stable personal identifiers by default. Require
-authenticated pairing for settings/time/reset writes; offer an explicit pairing
-window. Plan for authenticated firmware update, rollback protection and a
-recoverable debug-lock procedure before production.
+Pairing uses a physical 60-second window and an OLED passkey. Advertising
+contains no step history; privacy and saved bonds are enabled. Authenticated
+OTA, rollback protection and debug locking remain production-release work.
 
 ## Power measurements
 
@@ -135,4 +134,5 @@ edge settles within the shortest configured pulse and the MCU input timing.
 
 References: [TI BQ25150, pin functions and low-power mode](https://www.ti.com/lit/ds/symlink/bq25150.pdf),
 [Bosch BMA400, interrupt features and step counter](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bma400-ds000.pdf).
-These are bring-up instructions, not implemented or hardware-tested firmware.
+These are hardware bring-up instructions. Firmware implementation and software
+validation are in `firmware/`; assembled-hardware validation remains outstanding.

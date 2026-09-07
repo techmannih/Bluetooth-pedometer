@@ -172,6 +172,13 @@ versioned.
 
 ## Build and inspect
 
+The implemented device firmware, BLE protocol, build/flash commands and host
+tests are documented in [`firmware/README.md`](firmware/README.md). Run
+`python3 firmware/setup.py` and `python3 firmware/build.py` from this directory.
+Its default build tracks steps and supports BLE/OLED while keeping battery
+charging inhibited until a verified pack profile is configured. Firmware
+software checks do not replace the assembled-board bring-up measurements.
+
 ```sh
 bun install
 bun run typecheck

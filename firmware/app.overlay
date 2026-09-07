@@ -1,0 +1,96 @@
+#include <zephyr/dt-bindings/gpio/gpio.h>
+#include <zephyr/dt-bindings/pinctrl/cc23x0-pinctrl.h>
+/* Use TI's unchanged CC2340R53 radio/clock support, with the pedometer's
+ * actual hardware definitions. No LaunchPad peripherals remain enabled. */
+/delete-node/ &boot_partition;
+/delete-node/ &slot0_partition;
+/delete-node/ &slot1_partition;
+/delete-node/ &mx25r80;
+/delete-node/ &boosterpack_header;
+/ {
+    /delete-node/ aliases;
+    /delete-node/ leds;
+    /delete-node/ pwmleds;
+    /delete-node/ keys;
+    model = "Bluetooth Pedometer R4";
+    compatible = "pedometer,cc2340r53";
+    chosen {
+        /delete-property/ zephyr,console;
+        /delete-property/ zephyr,shell-uart;
+        /delete-property/ zephyr,bt-c2h-uart;
+        /delete-property/ zephyr,uart-mcumgr;
+        zephyr,sram = &sram0;
+        zephyr,flash = &flash0;
+        zephyr,code-partition = &slot0_partition;
+        zephyr,bt_hci = &ti_bt_hci;
+    };
+    aliases { watchdog0 = &wdt0; };
+};
+&cpu0 { clock-frequency = <48000000>; };
+&gpio0 {
+    status = "okay";
+    charger_inhibit { gpio-hog; gpios = <1 GPIO_ACTIVE_HIGH>; output-high; };
+    oled_off { gpio-hog; gpios = <21 GPIO_ACTIVE_HIGH>; output-low; };
+    oled_reset { gpio-hog; gpios = <13 GPIO_ACTIVE_HIGH>; output-low; };
+    oled_dc { gpio-hog; gpios = <12 GPIO_ACTIVE_HIGH>; output-low; };
+    oled_cs { gpio-hog; gpios = <11 GPIO_ACTIVE_HIGH>; output-low; };
+};
+&pinctrl {
+    pedometer_scl: pedometer_scl {
+        pinmux = <24 DIO24_I2C0_SCL>;
+        bias-disable; drive-open-drain; input-enable;
+    };
+    pedometer_sda: pedometer_sda {
+        pinmux = <0 DIO0_I2C0_SDA>;
+        bias-disable; drive-open-drain; input-enable;
+    };
+    pedometer_sck: pedometer_sck { pinmux = <8 DIO8_SPI0_SCLK>; bias-disable; };
+    pedometer_mosi: pedometer_mosi { pinmux = <19 DIO19_SPI0_MOSI>; bias-disable; };
+    /* TI's driver indexes SCK/MOSI/MISO even for TX-only transfers. DIO25
+     * is a no-connect on this PCB and provides the required unused RX input. */
+    pedometer_miso: pedometer_miso {
+        pinmux = <25 DIO25_SPI0_MISO>; bias-pull-down; input-enable;
+    };
+    pedometer_sck_sleep: pedometer_sck_sleep {
+        pinmux = <8 DIO8_GPIO8>; bias-pull-down; input-enable;
+    };
+    pedometer_mosi_sleep: pedometer_mosi_sleep {
+        pinmux = <19 DIO19_GPIO19>; bias-pull-down; input-enable;
+    };
+    pedometer_miso_sleep: pedometer_miso_sleep {
+        pinmux = <25 DIO25_GPIO25>; bias-pull-down; input-enable;
+    };
+};
+&i2c0 {
+    status = "okay";
+    clock-frequency = <100000>;
+    pinctrl-0 = <&pedometer_scl &pedometer_sda>;
+    pinctrl-names = "default";
+};
+&spi0 {
+    /delete-property/ cs-gpios;
+    status = "okay";
+    pinctrl-0 = <&pedometer_sck &pedometer_mosi &pedometer_miso>;
+    pinctrl-1 = <&pedometer_sck_sleep &pedometer_mosi_sleep &pedometer_miso_sleep>;
+    pinctrl-names = "default", "sleep";
+};
+&aes { status = "okay"; };
+&rng { status = "okay"; };
+&dma { status = "okay"; };
+&wdt0 { status = "okay"; };
+&rtc0 { status = "okay"; };
+
+&flash0 {
+    partitions {
+        slot0_partition: partition@0 {
+            label = "image-0";
+            reg = <0x00000000 0x0007c000>;
+        };
+    };
+};
+&uart0 { status = "disabled"; };
+&adc0 { status = "disabled"; };
+&lgpt1 { status = "disabled"; };
+&lgpt2 { status = "disabled"; };
+&pwm5 { status = "disabled"; };
+&pwm6 { status = "disabled"; };

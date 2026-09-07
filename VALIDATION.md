@@ -5,6 +5,51 @@ covers the current source. R3 and older sections preserve historical results.
 A successful CLI exit alone is insufficient: the build separately runs native
 routing DRC, required-port connectivity and Gerber copper-short detection.
 
+## 2026-09-07 — PCB connector silkscreen
+
+All 19 electrical contacts on J2, J3, J4 and J5 were checked against their
+physical PCB pads and connected nets. In top view, J2 runs left-to-right
+GND / NTC / BAT+ (pins 3 / 2 / 1); its labels now use centered 0.45 mm text.
+J3 and J4 retain their individually centered labels at the 2 mm pad pitch.
+J4's VREF label corresponds to the VCORE target-voltage sense connection.
+
+J5's numbered signal legend now sits above its reference designator without
+overlapping it. Numbers 1–4 beneath the contacts match CHARGER_IN,
+BAT_PACK_POS, VCORE and GND. The number row clears the nearby battery-net via.
+The two mechanical mounting pads remain unconnected.
+
+Chrome-rendered PCB crops were inspected for all four connectors. The 19
+contact annotations and J5 legend are inside the board outline and have no
+rendered bounding-box overlap with other silkscreen, pads, holes or vias.
+Typecheck, the full build, native routing/required-port checks and the
+all-layer Gerber shorts check pass. Artifact comparison confirms unchanged
+electrical pin/net memberships, board outline, components and copper geometry.
+Snapshots were regenerated. Evidence is in `checks/connector-silkscreen/`.
+
+## 2026-09-07 — connector pin labels, Y1 import and USB text
+
+J2, J3, J4 and J5 show their signal names inside the connector symbols,
+next to the corresponding pin numbers. Symbol widths and 0.5 mm pin spacing
+keep the names readable. Connections are declared on the connectors;
+R3's PMIC_IMAX and ground branch remain clear of connector annotations.
+Y1 uses the C1985532 symbol from a fresh
+`tsci import C1985532 --jlcpcb --use-exact-footprint` import, with unique
+ground aliases, explicit drawing stroke widths, and reference/frequency text.
+The existing imported footprint and CAD geometry are retained. The USB
+silkscreen legend is left-aligned 0.9 mm inside the straight board edge.
+
+Typecheck, the full build, native routing/required-port checks and all-layer
+Gerber shorts check pass. Artifact comparison confirms unchanged pin/net
+memberships and PCB component, pad, hole, trace, via and pour geometry.
+The multi-sheet schematic and PCB snapshots were regenerated from the built
+JSON. R3 and all four connector symbols were inspected. Visual previews and
+comparison details are in `checks/pin-label-repair/`. The dev server also
+excludes `firmware/**` from file scanning so SDK sources do not stall preview
+initialization. The earlier Y1/USB import evidence is in `checks/connector-labels/`.
+The live browser preview was checked on the power, MCU and I/O sheets: all
+expected connector pin names are present, with no browser page errors.
+Existing supplier-footprint and metadata warnings remain.
+
 ## R4 follow-up — schematic readability
 
 `ANT` is now a horizontal annotation above the antenna symbol. The feed uses

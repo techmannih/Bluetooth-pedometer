@@ -18,5 +18,5 @@
     "types": ["tscircuit"]
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "dist", ".claude", ".agents"]
+  "exclude": ["node_modules", "dist", "firmware", ".claude", ".agents"]
 }

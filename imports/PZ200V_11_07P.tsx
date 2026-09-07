@@ -10,7 +10,7 @@ const pinLabels = {
   pin7: ["pin7"]
 } as const
 
-export const PZ200V_11_07P = (props: ChipProps<typeof pinLabels>) => {
+export const PZ200V_11_07P = (props: ChipProps) => {
   return (
     <chip
       pinLabels={pinLabels}

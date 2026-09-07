@@ -1,7 +1,7 @@
 {
   "$schema": "https://cdn.jsdelivr.net/npm/@tscircuit/cli/types/tscircuit.config.schema.json",
   "includeBoardFiles": ["index.circuit.tsx"],
-  "ignoredFiles": ["checks/**", "dist/**", "build/**", "*.log"],
+  "ignoredFiles": ["checks/**", "dist/**", "build/**", "firmware/**", "*.log"],
   "build": {
     "workerTimeoutMs": 1200000
   }
