@@ -371,7 +371,12 @@ export const BluetoothPedometer = () => (
       schHeight={0.6}
       connections={{ pin1: "net.VCORE", pin2: "net.SWDIO", pin3: "net.SWDCK", pin4: "net.MCU_RSTN", pin5: "net.GND" }}
     />
-    <silkscreentext text="VREF SWDIO SWCLK RST GND" pcbX={0} pcbY={-15.3} fontSize="0.42mm" />
+    {/* Centre each label under its pin on the header's 2 mm pitch. */}
+    <silkscreentext text="VREF" pcbX={-4} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="SWDIO" pcbX={-2} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="SWCLK" pcbX={0} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="RST" pcbX={2} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="GND" pcbX={4} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
 
     {/* Clocks */}
     <ABM11W_48_0000MHZ_7_B1U_T3
@@ -478,7 +483,13 @@ export const BluetoothPedometer = () => (
         pin7: "net.OLED_CS",
       }}
     />
-    <silkscreentext text="OLED: G V SCK MOSI RST DC CS" pcbX={13.5} pcbY={-15.3} fontSize="0.42mm" />
+    <silkscreentext text="GND" pcbX={7.5} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="VCC" pcbX={9.5} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="SCK" pcbX={11.5} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="MOSI" pcbX={13.5} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="RST" pcbX={15.5} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="DC" pcbX={17.5} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
+    <silkscreentext text="CS" pcbX={19.5} pcbY={-15.55} anchorAlignment="center" fontSize="0.45mm" />
 
     <SKRPACE010
       name="SW2"
