@@ -6,6 +6,21 @@ errors, no disconnected nets in the geometric audit and no Gerber shorts at
 The source disables automatic rerouting to preserve the complete copper;
 the build still independently runs the native routing checks.
 
+The current export workflow and three upload files are in
+[`fabrication/README.md`](./fabrication/README.md). Use `bun run export:fabrication`
+to regenerate them together, then `bun run check:fabrication` to verify their
+hashes and package consistency. Pending package issues are recorded in
+[`PACKAGE_AUDIT.md`](./PACKAGE_AUDIT.md).
+
+## USB label in the Gerber viewer
+
+The USB charging label uses a centre anchor at X = -18 mm. The pinned Gerber
+exporter reverses `center_left` text alignment, which previously put most of
+this label outside the left board edge even though the local PCB preview
+looked correct. Regenerate and upload the new `fabrication/Gerbers.zip`;
+an existing JLCPCB upload retains the old artwork. This fixes clipping;
+the existing small silkscreen sizes still need the assembler's print review.
+
 ## PCB class
 
 - 46.6 mm x 32 mm, 1.0 mm FR-4, four copper layers.
@@ -13,12 +28,12 @@ the build still independently runs the native routing checks.
   signal escape cuts, L3 low-speed/power, L4 signals/ground fill. The design
   includes the L2 GND pour; minimize remaining L2 signal length during final
   fabrication-CAD review to make the return plane as continuous as practical.
-- 0.075 mm (3 mil) nominal fine-pitch routes in the BGA escape regions.
+- Current minimum routed trace width is 0.10 mm, measured from the built artifact.
 - The source sets a 0.05 mm trace-to-pad minimum and 0.10 mm pad-to-pad and
   via-to-pad minima; inspect actual trace-to-trace
   clearances in the final routed output and confirm that the selected process
   explicitly supports all fine-pitch rules.
-- All 138 escape/stitching/routing vias use 0.20 mm drill / 0.45 mm outer copper
+- All 142 current escape/stitching/routing vias use 0.20 mm drill / 0.45 mm outer copper
   diameter; the autorouter minima match. Their nominal annular ring is
   0.125 mm. These vias span all four layers, NOT blind laser microvias.
   This matches the alternative dimensions in the user-provided JLCPCB email,

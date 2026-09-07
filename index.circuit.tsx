@@ -150,7 +150,8 @@ export const BluetoothPedometer = () => (
       }}
       noConnect={["SBU1", "SBU2"]}
     />
-    <silkscreentext text="USB: 5V CHG ONLY (D+/D- TP)" pcbX={-22.4} pcbY={-8.3} anchorAlignment="center_left" fontSize="0.42mm" />
+    {/* Use a center anchor: gerber exporter 0.0.104 reverses center_left alignment. */}
+    <silkscreentext text="USB: 5V CHG ONLY (D+/D- TP)" pcbX={-18} pcbY={-8.3} anchorAlignment="center" fontSize="0.42mm" />
     <testpoint
       name="TP_DP"
       schSheetName="power"

@@ -5,6 +5,66 @@ covers the current source. R3 and older sections preserve historical results.
 A successful CLI exit alone is insufficient: the build separately runs native
 routing DRC, required-port connectivity and Gerber copper-short detection.
 
+## 2026-09-08 — USB silkscreen clipping correction
+
+The JLCPCB screenshot showed only the USB label's trailing `TP)` because
+`circuit-json-to-gerber@0.0.104` reverses `center_left` alignment. Its actual
+exported stroke bounds were X = -30.245595 to -22.550314 mm, across the board's
+left edge at -23.3 mm. The source now uses `center` at X = -18 mm; exported
+bounds are -21.921660 to -14.226379 mm. The unchanged font size is 0.42 mm.
+
+All 90 silkscreen text elements were individually exported with the same
+official exporter and their stroke-inclusive bounding boxes checked against
+the rounded board outline: the USB label was the only failure before this
+change; all pass afterward. Before/after USB stroke previews were rendered
+directly from Gerber coordinates and inspected. This verifies edge clipping,
+not printability or clearance from pads.
+
+Fresh fabrication export passes all ten packaging tests, typecheck, the gated
+build, native routing/required-port checks, Gerber shorts and package checks.
+Only the USB silkscreen record changes in the circuit geometry; generated
+warning IDs/order and the source filesystem hash also change. Comparing the
+old and new upload ZIPs after excluding creation-date comments confirms that
+only `F_SilkScreen.gbr` changes; the other twelve layer/drill files are identical.
+The PCB snapshot was refreshed; the schematic snapshot is unchanged.
+Evidence: `checks/silkscreen-export/`. Upload the regenerated ZIP to replace
+the old JLCPCB artwork; no remote upload was performed.
+
+## 2026-09-08 — Fabrication-file workflow
+
+Compared the public AnasSarkiz/ble-pedometer 1.0.7 and
+imrishabh18/pedometer 1.1.3 file inventories and manufacturing documents.
+Their relevant deliverables are mapped in
+[`fabrication/REFERENCE_COMPARISON.md`](./fabrication/REFERENCE_COMPARISON.md).
+The new `export:fabrication` command generates this board's Gerbers, JLCPCB
+BOM/CPL, placement and drill drawings, full schematic, pin map, checksums
+and CAM review ZIP. It exports the unchanged artifact from a fresh gated
+build, using official `circuit-json-to-gerber@0.0.104` without patches.
+
+The first full export passes typecheck, native routing/required-port checks,
+the build's all-layer Gerber shorts check, and the package's population/drill
+checks. Ten packaging tests pass, covering duplicate/inch drills, incorrect
+slot orientation, mirrored coordinates, blind spans, population/supplier
+errors, stale source and edited CPL files. Snapshot comparison passes;
+independent copper continuity remains 215 connected pins / 48 nets with
+zero opens/shorts. Assembly and drill drawings were rendered and inspected.
+
+Current outputs contain 33 BOM rows / 59 fitted placements, all 231 physical
+pin mappings, four copper layers and separate plated/NPTH drill files.
+Every exported drill operation matches source geometry: 159 round plated
+holes (142 vias plus 17 component/test-point holes), four plated USB slots
+and four NPTH holes. The current artifact has 311 trace paths and a minimum
+trace width of 0.10 mm; current overview/fabrication notes now use these
+measurements instead of the older R4 counts.
+
+`check:fabrication` validates source/output hashes and both archive contents;
+it correctly rejected the previous package after a packaging-script edit.
+This is package consistency, not manufacturing release. Supplier orientation,
+the existing footprint/CAD discrepancies, and factory review of exported
+copper clearances, mask/paste, stencil, silkscreen and RF stackup remain
+pending. The manifest explicitly retains engineering-review status.
+No upload or order was made. Evidence: `checks/reference-fabrication/`.
+
 ## 2026-09-07 — Footprint, symbol and CAD audit
 
 The [package audit](./PACKAGE_AUDIT.md) supersedes any interpretation of prior

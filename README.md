@@ -24,7 +24,7 @@ service connections occupy the upper left, the MCU/RF cluster the upper right,
 and the accelerometer the centre. All 48 nets / 215 connected fitted-part pins
 pass the independent copper-continuity audit. Native routing checks report zero
 errors; the all-layer Gerber shorts check also passes at 100 pixels/mm.
-The board contains 303 explicit layer paths and 138 through-vias.
+The current board contains 311 explicit layer paths and 142 through-vias.
 
 Automatic rerouting is disabled because the complete paths are already authored
 in `routing.tsx`. This is a completed manual route, not a successful automatic
@@ -207,12 +207,21 @@ a direct CLI/cloud preview alone does not run the package-level gate.
 Each step must succeed before the next runs. To repeat the shorts check alone, use
 `bunx tsci check shorts dist/index/circuit.json`.
 
-No custom `scripts/` directory is required. The small `check:artifact` command
-is defined directly in `package.json`. The former `audit`, `test` and
-`power-budget` package commands have been removed at the user's request, not
-replaced with no-op checks. The native workflow does not reproduce the former
-project-specific BOM/electrical regression suite or battery-runtime calculator;
-manual design review and measured battery-life validation remain necessary.
+The small `check:artifact` command remains in `package.json`. The fabrication
+workflow adds only the export/packaging helpers under `scripts/`; the former
+general `audit`, `test` and `power-budget` commands remain removed.
+
+```sh
+bun run export:fabrication
+bun run check:fabrication
+```
+
+These create and verify [`fabrication/`](./fabrication/README.md): Gerbers,
+JLCPCB-format BOM/CPL, assembly and drill drawings, full schematic, pin map,
+hash manifest and a CAM review bundle. The exporter uses the fresh gated
+build and pinned official Gerber exporter 0.0.104. The package is for review;
+the pending footprint, placement and process issues remain documented.
+`bun run test:fabrication` checks the packaging utility's failure cases.
 
 `snapshot:update` checks the netlist and updates the board's PCB/schematic
 snapshots. It leaves the validated build artifacts in `dist/index/` intact.
